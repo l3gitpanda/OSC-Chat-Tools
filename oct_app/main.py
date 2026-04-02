@@ -3,7 +3,6 @@ import time
 import threading
 from threading import Thread, Lock
 import ast
-import requests
 from collections import defaultdict
 import ctypes
 import json
@@ -24,8 +23,6 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
 import socket
 import pyperclip
-from flask import Flask, request
-from werkzeug.serving import make_server
 import hashlib
 import base64
 #import GPUtil
@@ -337,43 +334,7 @@ except Exception as e:
 
 
 def update_checker(a):
-  global updatePrompt
-  global outOfDate
-  global windowAccess
-  global version
-  url = 'https://api.github.com/repos/Lioncat6/OSC-Chat-Tools/releases'
-  try:
-    response = requests.get(url)
-    if response.ok:
-          data = response.json()
-          if int(data[0]["tag_name"].replace('v', '').replace('.', '').replace(' ', '').replace('Version', '').replace('version', '')) != int(version.replace('v', '').replace('.', '').replace(' ', '').replace('Version', '').replace('version', '')):
-            #print("A new version is available! "+ data[0]["tag_name"].replace('v', '').replace(' ', '').replace('Version', '').replace('version', '')+" > " + version.replace('v', '').replace(' ', '').replace('Version', '').replace('version', ''))
-            outputLog("A new version is available! "+ data[0]["tag_name"].replace('v', '').replace(' ', '').replace('Version', '').replace('version', '')+" > " + version.replace('v', '').replace(' ', '').replace('Version', '').replace('version', ''))
-            if updatePrompt or a:
-              def updatePromptWaitThread():
-                while windowAccess == None:
-                  time.sleep(.1)
-                  pass
-                windowAccess.write_event_value('updateAvailable', data[0]["tag_name"].replace('v', '').replace(' ', '').replace('Version', '').replace('version', ''))
-              updatePromptWaitThreadHandler = Thread(target=updatePromptWaitThread).start()
-            outOfDate = True
-            def updatePromptWaitThread2():
-              while windowAccess == None:
-                  time.sleep(.1)
-                  pass
-              windowAccess.write_event_value('markOutOfDate', '')
-            updatePromptWaitThreadHandler2 = Thread(target=updatePromptWaitThread2).start()
-          else:
-            if a:
-              windowAccess.write_event_value('popup', "Program is up to date! Version "+version)
-            #print("Program is up to date! Version "+version)
-            outputLog("Program is up to date! Version "+version)
-          
-    else:
-        #print('Update Checking Error occurred:', response.status_code)
-        outputLog('Update Checking Error occurred:', response.status_code)
-  except Exception as e:
-    outputLog('Update Checking Error occurred: '+ str(e))
+  pass
 
 async def get_media_info():
     sessions = await MediaManager.request_async()
@@ -557,6 +518,7 @@ def layoutPreviewBuilder(layout, window):
       window['layout'+str(x)].update(visible=False)
  
 def refreshAccessToken(oldRefreshToken):
+  import requests
   global spotifyRefreshToken
   global spotifyAccessToken
   global spotify_client_id
@@ -574,6 +536,7 @@ def refreshAccessToken(oldRefreshToken):
   spotifyAccessToken =  response.json().get('access_token')    
 
 def getSpotifyPlaystate():
+  import requests
   global spotifySongUrl
   global spotifyRefreshToken
   global spotifyAccessToken
@@ -615,8 +578,9 @@ def getSpotifyPlaystate():
   if playState == None:
     playState = ''
   return playState
-def loadSpotifyTokens():  
-  global spotifyLinkStatus 
+def loadSpotifyTokens():
+  import requests
+  global spotifyLinkStatus
   outputLog("Loading spotify tokens...")
   def get_profile(accessToken):
       headers = {
@@ -1723,6 +1687,7 @@ def uiThread():
               manualOverrideWindow.close()
               if manualCode:
                 try:
+                  import requests
                   def getAccessToken(code):
                     token_url = 'https://accounts.spotify.com/api/token'
                     data = {
@@ -2499,6 +2464,9 @@ def spotifyConnectionManager():
         time.sleep(1)
 spotifyConnectionThread = Thread(target=spotifyConnectionManager).start()
 def linkSpotify():
+  import requests
+  from flask import Flask, request
+  from werkzeug.serving import make_server
   outputLog('Begin Spotify Linking...')
   global spotify_client_id
   global spotify_redirect_uri
@@ -2758,7 +2726,6 @@ def run_app():
   Thread(target=vrcRunningCheck, daemon=True).start()
   Thread(target=runmsg, daemon=True).start()
   Thread(target=uiThread).start()
-  Thread(target=update_checker, args=(False,), daemon=True).start()
   Thread(target=timeParameterUpdate, daemon=True).start()
 
 
