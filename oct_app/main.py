@@ -15,10 +15,7 @@ import keyboard
 import asyncio
 import psutil
 import webbrowser
-from winsdk.windows.media.control import \
-    GlobalSystemMediaTransportControlsSessionManager as MediaManager
-import winsdk.windows.media.control as wmc
-from websocket import create_connection # websocket-client
+# winsdk, websocket imported lazily in functions that use them
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
 import socket
@@ -26,7 +23,7 @@ import pyperclip
 import hashlib
 import base64
 #import GPUtil
-from pynvml import *
+# pynvml imported lazily in gpu plugin
 
 from tendo import singleton
 
@@ -337,6 +334,9 @@ def update_checker(a):
   pass
 
 async def get_media_info():
+    from winsdk.windows.media.control import \
+        GlobalSystemMediaTransportControlsSessionManager as MediaManager
+    import winsdk.windows.media.control as wmc
     sessions = await MediaManager.request_async()
     def is_apple_music_session(session):
       if session is None:
@@ -374,6 +374,8 @@ async def get_media_info():
     raise Exception('TARGET_PROGRAM is not the current media session')
   
 async def getMediaSession():
+    from winsdk.windows.media.control import \
+        GlobalSystemMediaTransportControlsSessionManager as MediaManager
     sessions = await MediaManager.request_async()
     session = sessions.get_current_session()
     if appleMusicOnly and session is not None:
@@ -383,6 +385,7 @@ async def getMediaSession():
         session = apple_sessions[0] if len(apple_sessions) > 0 else None
     return session
 def mediaIs(state):
+    import winsdk.windows.media.control as wmc
     session = asyncio.run(getMediaSession())
     if session == None:
         return False
@@ -2323,6 +2326,7 @@ def timeParameterUpdate():
 
 
 def hrConnectionThread():
+  from websocket import create_connection
   while run:
     global hrConnected
     global heartRate
