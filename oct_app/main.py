@@ -11,7 +11,7 @@ import re
 import FreeSimpleGUI as sg
 from datetime import datetime, timezone
 from pythonosc import udp_client
-import keyboard
+# keyboard, pyperclip imported lazily where used
 import asyncio
 import psutil
 import webbrowser
@@ -19,13 +19,11 @@ import webbrowser
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
 import socket
-import pyperclip
 import hashlib
 import base64
 #import GPUtil
 # pynvml imported lazily in gpu plugin
-
-from tendo import singleton
+# tendo.singleton imported lazily at startup check
 
 from .config import APP_CONFIG, RUNTIME_STATE
 from .plugins import create_default_registry
@@ -202,11 +200,12 @@ spotifySongUrl = 'https://spotify.com'
 
 nameToReturn = ''
 
-CHATBOX_PLUGIN_REGISTRY = create_default_registry()
+CHATBOX_PLUGIN_REGISTRY = None
 
 #check to see if code is already running
 
 try:
+    from tendo import singleton
     me = singleton.SingleInstance() #also me (who's single)
 except:
     ctypes.windll.user32.MessageBoxW(None, u"OSC Chat Tools is already running!.", u"OCT is already running!", 16)
@@ -220,6 +219,7 @@ def fatal_error(error = None):
   if error != None:
     result = ctypes.windll.user32.MessageBoxW(None, u"The program crashed with an error message. Would you like to copy it to your clipboard?", u"OCT Fatal Error", 3 + 64)
     if result == 6:
+      import pyperclip
       pyperclip.copy(str(datetime.now())+" ["+threading.current_thread().name+"] "+str(error))
   result = ctypes.windll.user32.MessageBoxW(None, u"Open the github page to get support?", u"OCT Fatal Error", 3 + 64)
   if result == 6:
@@ -1464,6 +1464,7 @@ def uiThread():
       elif event == 'afk':
         afk = values['afk']
       elif event == 'run_binding':
+        import keyboard
         run_binding_layout = [[sg.Text('Press any key to bind to \'Toggle Run\'')],[sg.Text('', key='preview_bind')],[sg.Button('Ok', disabled=True, key='Ok'), sg.Button('Cancel', disabled=True, key='Cancel')]]
         run_binding_window = sg.Window('Bind \'Toggle Run\'', run_binding_layout, size=(300, 90), element_justification='center', no_titlebar=True, modal=True)
         def checkPressThread():
@@ -1481,6 +1482,7 @@ def uiThread():
             break
         run_binding_window.close()
       elif event == 'afk_binding':
+        import keyboard
         run_binding_layout = [[sg.Text('Press any key to bind to \'Toggle Afk\'')],[sg.Text('', key='preview_bind')],[sg.Button('Ok', disabled=True, key='Ok'), sg.Button('Cancel', disabled=True, key='Cancel')]]
         run_binding_window = sg.Window('Bind \'Toggle Afk\'', run_binding_layout, size=(300, 90), element_justification='center', no_titlebar=True, modal=True)
         def checkPressThread():
@@ -1912,22 +1914,7 @@ def oscClientDef():
       outputLog(f"Failed to initialize OSC client: {e}")
     time.sleep(.5)
 
-dispatcher = Dispatcher()
-dispatcher.map("/avatar/parameters/AFK", afk_handler)
-dispatcher.map("/avatar/parameters/VRMode", vr_handler) # The game never sends this value from what I've seen
-dispatcher.map("/avatar/parameters/MuteSelf", mute_handler)
-#dispatcher.map("/avatar/parameters/InStation", inSeat_handler)
-#dispatcher.map("/avatar/parameters/Voice", volume_handler)
-#dispatcher.map("/avatar/parameters/Earmuffs", usingEarmuffs_handler)
-dispatcher.map("/avatar/parameters/Boop", boop_handler)
-dispatcher.map("/avatar/parameters/boop", boop_handler)
-dispatcher.map("/avatar/parameters/Booped", boop_handler)
-dispatcher.map("/avatar/parameters/Contact/Receiver/Boop", boop_handler)
-dispatcher.map("/avatar/parameters/HeadPat", pat_handler)
-dispatcher.map("/avatar/parameters/Pat", pat_handler)
-dispatcher.map("/avatar/parameters/PatBool", pat_handler)
-dispatcher.map("/avatar/parameters/Headpat", pat_handler)
-dispatcher.map("/avatar/parameters/Contact/Receiver/Pat", pat_handler)
+dispatcher = None
 
 def oscForwardingManager():
   global runForewordServer
@@ -2637,6 +2624,7 @@ def runmsg():
     
 def msgPlayCheck():
   try:
+    import keyboard
     if keyboard.is_pressed(keybind_run):
       msgPlayToggle()
   except:
@@ -2657,6 +2645,7 @@ def msgPlayToggle():
             time.sleep(.5)
     
 def afkCheck():
+  import keyboard
   global isAfk
   global afk
   if useAfkKeybind:
@@ -2712,6 +2701,22 @@ def vrcRunningCheck():
 
 def run_app():
   global client
+  global CHATBOX_PLUGIN_REGISTRY
+  global dispatcher
+  CHATBOX_PLUGIN_REGISTRY = create_default_registry()
+  dispatcher = Dispatcher()
+  dispatcher.map("/avatar/parameters/AFK", afk_handler)
+  dispatcher.map("/avatar/parameters/VRMode", vr_handler)
+  dispatcher.map("/avatar/parameters/MuteSelf", mute_handler)
+  dispatcher.map("/avatar/parameters/Boop", boop_handler)
+  dispatcher.map("/avatar/parameters/boop", boop_handler)
+  dispatcher.map("/avatar/parameters/Booped", boop_handler)
+  dispatcher.map("/avatar/parameters/Contact/Receiver/Boop", boop_handler)
+  dispatcher.map("/avatar/parameters/HeadPat", pat_handler)
+  dispatcher.map("/avatar/parameters/Pat", pat_handler)
+  dispatcher.map("/avatar/parameters/PatBool", pat_handler)
+  dispatcher.map("/avatar/parameters/Headpat", pat_handler)
+  dispatcher.map("/avatar/parameters/Contact/Receiver/Pat", pat_handler)
   # Create initial OSC client synchronously before starting any threads,
   # so that client is guaranteed to be available when message sending begins.
   try:
