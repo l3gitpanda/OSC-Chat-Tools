@@ -37,27 +37,23 @@ OCT Is a standalone program used for interacting with Vrchat's OSC to send chat 
  - https://github.com/Lioncat6/OSC-Chat-Tools/releases/latest
  - Windows SmartScreen will complain due to it not being signed
 
-## Build it yourself
-(Not recommended cause things might be broken before release)
- - Install python [https://www.python.org/downloads/](https://www.python.org/downloads/)
- - Install all of the required Python modules (`pip install {module name}`):
-   - FreeSimpleGUI
-   - argparse
-   - datetime
-   - python-osc
-   - keyboard
-   - asyncio
-   - psutil
-   - winsdk
-   - websocket-client
-   - pyperclip
-   - pynvml
-   - tendo
- - In a command prompt window in the folder the `osc-chat-tools.py` is located in:
- - `pip install PyInstaller`
- - `python -m PyInstaller -wF --icon=oscicon.ico --clean osc-chat-tools.py`
- - Or run the included `build.bat` file
- - The resulting exe will be located in the `dist` folder
+## Build from source
+Use **Python 3.11**.
+
+Run this exact command sequence from the repository root:
+
+```powershell
+py -3.11 -m pip install --upgrade pip
+py -3.11 -m pip install -r requirements.txt
+py -3.11 -m pip install pyinstaller==6.11.1
+py -3.11 -m PyInstaller -wF --icon=oscicon.ico --clean osc-chat-tools.py
+```
+
+Or run one of the included helper scripts:
+- `build.bat` (CMD)
+- `build.ps1` (PowerShell)
+
+The resulting exe will be located in the `dist` folder.
 
 ## Run it locally
  - Install python [https://www.python.org/downloads/](https://www.python.org/downloads/)
