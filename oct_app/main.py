@@ -35,6 +35,7 @@ from pynvml import *
 from tendo import singleton
 
 from .config import APP_CONFIG, RUNTIME_STATE
+from .plugins import create_default_registry
 
 #importantest variables :)
 
@@ -205,6 +206,8 @@ cpu_percent = 0
 spotifySongUrl = 'https://spotify.com'
 
 nameToReturn = ''
+
+CHATBOX_PLUGIN_REGISTRY = create_default_registry()
 
 #check to see if code is already running
 
@@ -2189,249 +2192,95 @@ if __name__ == "__main__":
         
         def msgGen(a):
           global verticalDivider
-          global letsGetThatTime
-          global songInfo
-          global cpuDat
-          global ramDat
-          global hrInfo
           global msgOutput
-          global hideSong
-          global showPaused
-          global gpuDat
-          global timeVar
-          global useSpotifyApi
-          global useMediaManager
-          global timeDisplayAM
-          global timeDisplayPM
+          global spotifySongUrl
+          global songName
+          global tickCount
+          global timerEndStamp
+          global timerVar
+
           def checkData(msg, data):
             lf = "\v"
             if data == 1 or data == 3:
               msg = msg + " " + verticalDivider
             if data == 2 or data == 3:
-              msg =  msg + lf
+              msg = msg + lf
             return msg
-          def time(data=0):
-            global timeDisplayAM
-            global timeDisplayPM
-            now = datetime.now()
-            hour24 = now.strftime("%H")
-            hour = now.strftime("%H")
-            minute = now.strftime("%M")
-            time_zone = datetime.now().astimezone().tzname()
-            if time_zone == 'Central Daylight Time':
-              time_zone = 'CDT'
-            if int(hour) >= 12:
-                hour = int(hour)-12
-                if int(hour) == 0:
-                  hour = 12 
-                letsGetThatTime = timeDisplayPM.format_map(defaultdict(str, hour=hour, minute=minute, time_zone=time_zone, hour24=hour24))     
-            else:
-                if int(hour) == 0:
-                  hour = 12 
-                letsGetThatTime = timeDisplayAM.format_map(defaultdict(str, hour=hour, minute=minute, time_zone=time_zone, hour24=hour24))       
-            return(checkData(letsGetThatTime, data))
-          def text(data=0):
-            return(checkData(a.replace("\\n", "\v").replace("\\v", "\v"), data))
-          def timer(data=0):
-            global timerEndStamp
-            global timerDisplay
-            global timerVar
-            current_time = int(datetime.now().timestamp() * 1000)
-            timerVar = timerEndStamp - current_time
-            if (timerVar < 0):
-              timerVar = 0
-              timerEndStamp = int(datetime.now().timestamp() * 1000)
-            hours, remainder = divmod(timerVar // 1000, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            formatted_timer = timerDisplay.format_map(defaultdict(str, hours=f"{hours:02}", minutes=f"{minutes:02}", seconds=f"{seconds:02}"))
-            return checkData(formatted_timer, data)
-          def song(data=0):
-            global songInfo
-            global useSpotifyApi
-            global useMediaManager
-            global spotifyLinkStatus
-            global spotifyAccessToken
-            global spotifyRefreshToken
-            global spotifyPlayState
-            if useMediaManager:
-              try:
-                current_media_info = asyncio.run(get_media_info())
-                artist = current_media_info['artist']
-                title = current_media_info['title']
-                album_title = current_media_info['album_title'] 
-                album_artist = current_media_info['album_artist'] 
-                mediaPlaying = mediaIs('PLAYING')
-              except Exception as e:
-                artist = ''
-                title = ''
-                album_title = ''
-                album_artist = ''
-                mediaPlaying = False
-                if 'TARGET_PROGRAM' in str(e):
-                  #outputLog('Can\'t get media info, please make sure an application is playing audio')
-                  pass
-                else:
-                  if windowAccess != None:
-                    try:
-                        outputLog('mediaManagerError '+str(e))
-                        windowAccess.write_event_value('mediaManagerError', e)
-                    except:
-                      pass
-              if removeParenthesis:
-                title = re.sub(r' ?\([^)]*\)', '', title)
-              if mediaPlaying or (not showPaused):
-                songInfo = songDisplay.format_map(defaultdict(str, artist=artist,title=title,album_title=album_title, album_artist=album_artist))
-              else:
-                songInfo=songDisplay.format_map(defaultdict(str, artist=artist,title=title,album_title=album_title, album_artist=album_artist))+" ⏸️"
-                
-            else:
-              def formatTime(seconds = 0):
-                  minutes = int(seconds // 60)
-                  remaining_seconds = int(seconds % 60)
-                  return f"{minutes}:{remaining_seconds:02}"
-              global spotifySongDisplay
-              playState = spotifyPlayState
-              
-              if playState != None and playState != '': 
-                try:
-                  artist = playState.get('item').get('artists')[0].get('name')
-                  title = playState.get('item').get('name')
-                  album_title = playState.get('item').get('album').get('name')
-                  album_artist = playState.get('item').get('artists')[0].get('name')
-                  song_progress = formatTime(playState.get('progress_ms')/1000)
-                  song_length = formatTime(playState.get('item').get('duration_ms')/1000)
-                  volume = str(playState.get('device').get('volume_percent'))
-                  song_id = playState.get('item').get('id')
-                  mediaPlaying = playState.get('is_playing')
-                except:
-                  artist = ''
-                  title = ''
-                  album_title = ''
-                  album_artist = '' 
-                  song_progress = formatTime(0)
-                  song_length = formatTime(0)
-                  volume = '0'
-                  song_id = 'N/A'
-                  mediaPlaying = False
-              else:
-                artist = ''
-                title = ''
-                album_title = ''
-                album_artist = '' 
-                song_progress = formatTime(0)
-                song_length = formatTime(0)
-                volume = '0'
-                song_id = 'N/A'
-                mediaPlaying = False
-              if removeParenthesis:
-                title = re.sub(r' ?\([^)]*\)', '', title)
-              if mediaPlaying or (not showPaused):
-                songInfo = spotifySongDisplay.format_map(defaultdict(str, artist=artist,title=title,album_title=album_title, album_artist=album_artist, song_progress=song_progress, song_length=song_length, volume=volume, song_id=song_id))
-              else:
-                songInfo=spotifySongDisplay.format_map(defaultdict(str, artist=artist,title=title,album_title=album_title, album_artist=album_artist, song_progress=song_progress, song_length=song_length, volume=volume, song_id=song_id))+"⏸️"
-            global spotifySongUrl
-            try:
-              if useSpotifyApi:
-                spotifySongUrl = playState.get('item').get('external_urls').get('spotify')
-                windowAccess.write_event_value('updateSpotifySongName', [title, mediaPlaying, song_progress, song_length, artist])
-              else:
-                spotifySongUrl = ''
-                windowAccess.write_event_value('updateSpotifySongName', [title, mediaPlaying, 0, 0, artist])
-            except Exception as e:
-              #print(e)
-              pass
-            
-            global showOnChange
-            global songChangeTicks
-            global tickCount
-            #global songInfo
-            global songName
-            if hideSong and not mediaPlaying or title == '':
-              return ''
-            else:
-              if showOnChange:
-                if songInfo != songName:
-                  tickCount = songChangeTicks
-                  songName = songInfo
-                if tickCount != 0:
-                  tickCount = tickCount-1
-                  return(checkData(songInfo, data))
-                else:
-                  return ''
-              else:
-                return(checkData(songInfo, data))
-          def cpu(data=0):
-            cpu_percent = str(psutil.cpu_percent())
-            cpuDat = cpuDisplay.format_map(defaultdict(str, cpu_percent=cpu_percent))
-            return (checkData(cpuDat, data))
-          def ram(data=0): 
-            psutilVirtualMemory = psutil.virtual_memory()
-            ram_percent = str(int(psutilVirtualMemory[2]))
-            ram_used = str(round(int(psutilVirtualMemory[0])/1073741824-int(psutilVirtualMemory[1])/1073741824, 1))
-            ram_available = str(round(int(psutilVirtualMemory[1])/1073741824, 1))
-            ram_total = str(round(int(psutilVirtualMemory[0])/1073741824, 1))
-            ramDat = ramDisplay.format_map(defaultdict(str, ram_percent=ram_percent, ram_available=ram_available, ram_total=ram_total, ram_used=ram_used))
-            return (checkData(ramDat, data))
-          def gpu(data=0):
-            try:
-              nvmlInit()
-              handle = nvmlDeviceGetHandleByIndex(0)
-              info = nvmlDeviceGetUtilizationRates(handle)
-              #print(info)
-              gpu_percent = info.gpu
-              vram_percent = info.memory
-              nvmlShutdown()
-            except:
-              gpu_percent = "0"
-              vram_percent = "0"
-            #gpu_percent = str(round((GPUtil.getGPUs()[0].load*100), 1))
-            #gpu_percent = "0"
-            gpuDat = gpuDisplay.format_map(defaultdict(str, gpu_percent=gpu_percent, vram_percent=vram_percent))
-            return (checkData(gpuDat, data))
-          def hr(data=0):
-            hr = str(heartRate)
-            if hr == "0" or hr == "1":
-              hr = "-"
-            hrInfo = hrDisplay.format_map(defaultdict(str, hr=hr))
-            return (checkData(hrInfo, data))
-          def stt(data=0):
-            return (checkData("Coming Soon", data))
-          def div(data=0):
-            return (checkData(middleBar, data))
-          def mute(data=0):
-            if isMute: 
-              return (checkData(mutedDisplay, data))
-            else:
-              return (checkData(unmutedDisplay, data))
-          def playtime(data=0):
-            global timeVar
-            try:
-              minutes = int((timeVar-playTimeDat)/60)
-              hours, remainder_minutes = divmod(minutes, 60)
-              if vrcPID == None:
-                minutes = 0
-                hours = 0
-                remainder_minutes = 0
-            except Exception as e:
-              minutes = 0
-              hours = 0
-              remainder_minutes = 0
-            playDat = playTimeDisplay.format_map(defaultdict(str, hours="{:02d}".format(hours), remainder_minutes="{:02d}".format(remainder_minutes), minutes="{:02d}".format(minutes)))
-            return(checkData(playDat, data))
+
+          plugin_context = {
+            "check_data": checkData,
+            "vertical_divider": verticalDivider,
+            "middle_bar": middleBar,
+            "muted_display": mutedDisplay,
+            "unmuted_display": unmutedDisplay,
+            "is_muted": isMute,
+            "time_display_am": timeDisplayAM,
+            "time_display_pm": timeDisplayPM,
+            "timer_display": timerDisplay,
+            "timer_end_stamp": timerEndStamp,
+            "song_display": songDisplay,
+            "spotify_song_display": spotifySongDisplay,
+            "show_paused": showPaused,
+            "hide_song": hideSong,
+            "show_on_change": showOnChange,
+            "song_change_ticks": songChangeTicks,
+            "song_name": songName,
+            "tick_count": tickCount,
+            "use_media_manager": useMediaManager,
+            "use_spotify_api": useSpotifyApi,
+            "spotify_play_state": spotifyPlayState,
+            "remove_parenthesis": removeParenthesis,
+            "window_access": windowAccess,
+            "output_log": outputLog,
+            "get_media_info": lambda: asyncio.run(get_media_info()),
+            "media_is": mediaIs,
+            "cpu_display": cpuDisplay,
+            "ram_display": ramDisplay,
+            "gpu_display": gpuDisplay,
+            "hr_display": hrDisplay,
+            "heart_rate": heartRate,
+            "play_time_display": playTimeDisplay,
+            "time_var": timeVar,
+            "play_time_dat": playTimeDat,
+            "vrc_pid": vrcPID,
+            "song_info": '',
+            "spotify_song_url": spotifySongUrl,
+          }
+
+          text = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("text", plugin_context, a, data)
+          time = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("time", plugin_context, a, data)
+          timer = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("timer", plugin_context, a, data)
+          song = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("song", plugin_context, a, data)
+          cpu = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("cpu", plugin_context, a, data)
+          ram = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("ram", plugin_context, a, data)
+          gpu = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("gpu", plugin_context, a, data)
+          hr = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("hr", plugin_context, a, data)
+          stt = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("stt", plugin_context, a, data)
+          div = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("div", plugin_context, a, data)
+          mute = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("mute", plugin_context, a, data)
+          playtime = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("playtime", plugin_context, a, data)
+
           try:
             msgOutput = eval("f'"f'{layoutString}'"'")
           except Exception as e:
             msgOutput = "Layout Error!\v"+str(e)
-          if msgOutput[-len(verticalDivider+" "):] == verticalDivider+" ":
+
+          timerEndStamp = plugin_context["timer_end_stamp"]
+          timerVar = plugin_context.get("timer_var", 0)
+          songName = plugin_context["song_name"]
+          tickCount = plugin_context["tick_count"]
+          spotifySongUrl = plugin_context["spotify_song_url"]
+
+          if msgOutput[-len(verticalDivider+" "): ] == verticalDivider+" ":
             msgOutput = msgOutput[:-len(verticalDivider+" ")-1]
-          if msgOutput[-len(middleBar+" "):] == middleBar+" ":
+          if msgOutput[-len(middleBar+" "): ] == middleBar+" ":
             msgOutput = msgOutput[:-len(middleBar+" ")]
           if "\v " in msgOutput[-2:]:
             msgOutput = msgOutput[:-2]
           if "\v" in msgOutput[-2:]:
             msgOutput = msgOutput[:-1]
           if not hideOutside:
-            msgOutput = topBar + " "+ msgOutput + " " +bottomBar 
+            msgOutput = topBar + " " + msgOutput + " " + bottomBar
           msgOutput = msgOutput.replace("\\n", "\v").replace("\\v", "\v")
         msgGen(a)
       elif afk:
