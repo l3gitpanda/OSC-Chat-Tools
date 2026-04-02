@@ -2197,8 +2197,9 @@ def sendMsg(a):
     global sendSkipped
     #end of stupid crap
     global timeVar
-    timeVar = time.time()
-    if playMsg:
+    try:
+     timeVar = time.time()
+     if playMsg:
       #message Assembler:
       if not scrollText and not afk:
         
@@ -2301,16 +2302,21 @@ def sendMsg(a):
         msgOutput = a
       if playMsg:
         if (str(msgOutput) != lastSent) or (not suppressDuplicates) or sentTime > 30:
-          if client is not None:
-            try:
-              client.send_message("/chatbox/input", [ str(msgOutput), True, False])
-            except Exception as e:
-              outputLog(f"OSC send error: {e}")
+          try:
+            global client
+            if client is None:
+              try:
+                _port = int(oscSendPort)
+              except (TypeError, ValueError):
+                _port = 9000
+              client = udp_client.SimpleUDPClient(str(oscSendAddress), _port)
+              outputLog(f"OSC client created inline: {oscSendAddress}:{_port}")
+            client.send_message("/chatbox/input", [ str(msgOutput), True, False])
             lastSent = str(msgOutput)
             sentTime = 0
             sendSkipped = False
-          else:
-            outputLog("OSC client not ready, skipping send")
+          except Exception as e:
+            outputLog(f"OSC send error: {e}")
         else:
           sendSkipped = True
       msgDelayMemory = message_delay
@@ -2318,6 +2324,8 @@ def sendMsg(a):
         if not playMsg or not run or ((msgDelayMemory != message_delay) and sendASAP) or sendSkipped == True:
           break
         time.sleep(.1)
+    except Exception as e:
+     outputLog(f"sendMsg error: {e}")
 
 def timeParameterUpdate():
   while run:
@@ -2617,35 +2625,39 @@ def runmsg():
       break
     time.sleep(0.1)
   while playMsg:
-    textStorage = messageString
-    if not afk and not scrollText:
-      for x in processMessage(messageString):
-        if afk or scrollText or (not playMsg) or (not run) or (messageString != textStorage):
-          textStorage = messageString
-          break
-        if x == "*":
-          sendMsg(" ㅤ")
-        else:
-          sendMsg(" "+x)
-        
-    elif afk:
-      sendMsg('\vAFK\v')
-      sendMsg('\vㅤ\v')
-    elif scrollText:
-      try:
-        fileToOpen = open(FileToRead, "r", encoding="utf-8")
-        fileText = fileToOpen.read()
-        if textParseIterator + 144 < len(fileText):
-          sendMsg(fileText[textParseIterator:textParseIterator+144])
-          textParseIterator = textParseIterator +144
-        else: 
-          sendMsg(fileText[textParseIterator:textParseIterator+len(fileText)-textParseIterator])
-          textParseIterator = 0
-      except Exception as e:
-        windowAccess.write_event_value('scrollError', e)
+    try:
+      textStorage = messageString
+      if not afk and not scrollText:
+        for x in processMessage(messageString):
+          if afk or scrollText or (not playMsg) or (not run) or (messageString != textStorage):
+            textStorage = messageString
+            break
+          if x == "*":
+            sendMsg(" ㅤ")
+          else:
+            sendMsg(" "+x)
+
+      elif afk:
+        sendMsg('\vAFK\v')
+        sendMsg('\vㅤ\v')
+      elif scrollText:
+        try:
+          fileToOpen = open(FileToRead, "r", encoding="utf-8")
+          fileText = fileToOpen.read()
+          if textParseIterator + 144 < len(fileText):
+            sendMsg(fileText[textParseIterator:textParseIterator+144])
+            textParseIterator = textParseIterator +144
+          else:
+            sendMsg(fileText[textParseIterator:textParseIterator+len(fileText)-textParseIterator])
+            textParseIterator = 0
+        except Exception as e:
+          windowAccess.write_event_value('scrollError', e)
+          sendMsg('')
+      else:
         sendMsg('')
-    else:
-      sendMsg('')
+    except Exception as e:
+      outputLog(f"Message loop error: {e}")
+      time.sleep(1)
   textParseIterator = 0
   if sendBlank and client is not None:
     client.send_message("/chatbox/input", [ "", True, False])
