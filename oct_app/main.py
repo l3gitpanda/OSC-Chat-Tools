@@ -113,6 +113,7 @@ suppressDuplicates = False
 sendASAP = False
 useMediaManager = True
 useSpotifyApi = False
+appleMusicOnly = False
 spotifySongDisplay =  '🎵\'{title}\' ᵇʸ {artist}🎶 『{song_progress}/{song_length}』'
 spotifyAccessToken = ''
 spotifyRefreshToken = ''
@@ -376,15 +377,24 @@ def update_checker(a):
 
 async def get_media_info():
     sessions = await MediaManager.request_async()
-    # This source_app_user_model_id check and if statement is optional
-    # Use it if you want to only get a certain player/program's media
-    # (e.g. only chrome.exe's media not any other program's).
-
-    # To get the ID, use a breakpoint() to run sessions.get_current_session()
-    # while the media you want to get is playing.
-    # Then set TARGET_ID to the string this call returns.
+    def is_apple_music_session(session):
+      if session is None:
+        return False
+      source_id = str(session.source_app_user_model_id).lower()
+      return "applemusic" in source_id or "applemusicwin" in source_id
 
     current_session = sessions.get_current_session()
+    if appleMusicOnly and not is_apple_music_session(current_session):
+      all_sessions = list(sessions.get_sessions())
+      apple_sessions = [x for x in all_sessions if is_apple_music_session(x)]
+      current_session = None
+      for x in apple_sessions:
+        if int(wmc.GlobalSystemMediaTransportControlsSessionPlaybackStatus["PLAYING"]) == x.get_playback_info().playback_status:
+          current_session = x
+          break
+      if current_session is None and len(apple_sessions) > 0:
+        current_session = apple_sessions[0]
+
     if current_session:  # there needs to be a media session running
         
         info = await current_session.try_get_media_properties_async()
@@ -405,6 +415,11 @@ async def get_media_info():
 async def getMediaSession():
     sessions = await MediaManager.request_async()
     session = sessions.get_current_session()
+    if appleMusicOnly and session is not None:
+      source_id = str(session.source_app_user_model_id).lower()
+      if "applemusic" not in source_id and "applemusicwin" not in source_id:
+        apple_sessions = [x for x in list(sessions.get_sessions()) if "applemusic" in str(x.source_app_user_model_id).lower() or "applemusicwin" in str(x.source_app_user_model_id).lower()]
+        session = apple_sessions[0] if len(apple_sessions) > 0 else None
     return session
 def mediaIs(state):
     session = asyncio.run(getMediaSession())
@@ -437,7 +452,8 @@ confDataDict = { #this dictionary will always exclude position 0 which is the co
   "1.5.69.42" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.70" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.71" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
-  "1.5.72" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp']
+  "1.5.72" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
+  "1.5.73" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp']
 }
 
 if os.path.isfile('please-do-not-delete.txt'):
@@ -709,6 +725,7 @@ def uiThread():
   
   global useMediaManager
   global useSpotifyApi
+  global appleMusicOnly
   global spotifySongDisplay
   global spotifyAccessToken
   global spotifyRefreshToken
@@ -851,8 +868,9 @@ def uiThread():
     [sg.Column([
                   [sg.Text("Windows Now Playing settings:")],
                   [sg.Text('Template to use for song display.\nVariables: {artist}, {title}, {album_title}, {album_artist}')],
-                  [sg.Input(key='songDisplay', size=(50, 1))]
-    ], size=(379, 100))],
+                  [sg.Input(key='songDisplay', size=(50, 1))],
+                  [sg.Checkbox('Only read Apple Music sessions', default=False, key='appleMusicOnly', enable_events=True)]
+    ], size=(379, 130))],
     [sg.Column([
                   [sg.Text("Spotify settings:")],
                   [sg.Text('Template to use for song display.\nVariables: {artist}, {title}, {album_title}, {album_artist}, \n{song_progress}, {song_length}, {volume}, {song_id}')],
@@ -1163,6 +1181,7 @@ def uiThread():
     window['sendASAP'].update(value=False)
     window['useMediaManager'].update(value=True)
     window['useSpotifyApi'].update(value=False)
+    window['appleMusicOnly'].update(value=False)
     window['spotifySongDisplay'].update(value='🎵\'{title}\' ᵇʸ {artist}🎶 『{song_progress}/{song_length}』')
     window['usePulsoid'].update(value=True)
     window['useHypeRate'].update(value=False)
@@ -1183,6 +1202,7 @@ def uiThread():
     global spotifyRefreshToken
     global useSpotifyApi
     global useMediaManager
+    global appleMusicOnly
     spotifyAccessToken = ''
     spotifyRefreshToken = ''
     spotifyLinkStatus = 'Unlinked'
@@ -1190,6 +1210,7 @@ def uiThread():
     window['useMediaManager'].update(value=True)
     useSpotifyApi = False
     useMediaManager = True
+    appleMusicOnly = False
     window.write_event_value('Apply', '')
     window['spotifyLinkStatus'].update(value=spotifyLinkStatus)
     window['spotifyLinkStatus'].update(text_color='orange')
@@ -1275,6 +1296,7 @@ def uiThread():
         window['sendASAP'].update(value=sendASAP)
         window['useMediaManager'].update(value=useMediaManager)
         window['useSpotifyApi'].update(value=useSpotifyApi)
+        window['appleMusicOnly'].update(value=appleMusicOnly)
         window['spotifySongDisplay'].update(value=spotifySongDisplay)
         window['usePulsoid'].update(value=usePulsoid)
         window['useHypeRate'].update(value=useHypeRate)
@@ -1407,6 +1429,7 @@ def uiThread():
           sendASAP = values['sendASAP']
           useMediaManager = values['useMediaManager']
           useSpotifyApi = values['useSpotifyApi']
+          appleMusicOnly = values['appleMusicOnly']
           spotifySongDisplay = values['spotifySongDisplay']
           usePulsoid = values['usePulsoid']
           useHypeRate = values['useHypeRate']
@@ -1421,7 +1444,7 @@ def uiThread():
           timerDisplay = values['timerDisplay']
           try:
             with open('please-do-not-delete.txt', 'w', encoding="utf-8") as f:
-              f.write(str([confVersion, message_delay, messageString, FileToRead, scrollText, hideSong, hideOutside, showPaused, songDisplay, showOnChange, songChangeTicks, minimizeOnStart, keybind_run, keybind_afk,topBar, middleBar, bottomBar, pulsoidToken, avatarHR, blinkOverride, blinkSpeed, useAfkKeybind, toggleBeat, updatePrompt, oscListenAddress, oscListenPort, oscSendAddress, oscSendPort, oscForewordAddress, oscForeword, oscListen, oscForeword, logOutput, layoutString, verticalDivider,cpuDisplay, ramDisplay, gpuDisplay, hrDisplay, playTimeDisplay, mutedDisplay, unmutedDisplay, darkMode, sendBlank, suppressDuplicates, sendASAP,useMediaManager, useSpotifyApi, spotifySongDisplay, spotifyAccessToken, spotifyRefreshToken, usePulsoid, useHypeRate, hypeRateKey, hypeRateSessionId, timeDisplayPM, timeDisplayAM, showSongInfo, spotify_client_id, useTimeParameters, removeParenthesis, timerDisplay, timerEndStamp]))
+              f.write(str([confVersion, message_delay, messageString, FileToRead, scrollText, hideSong, hideOutside, showPaused, songDisplay, showOnChange, songChangeTicks, minimizeOnStart, keybind_run, keybind_afk,topBar, middleBar, bottomBar, pulsoidToken, avatarHR, blinkOverride, blinkSpeed, useAfkKeybind, toggleBeat, updatePrompt, oscListenAddress, oscListenPort, oscSendAddress, oscSendPort, oscForewordAddress, oscForeword, oscListen, oscForeword, logOutput, layoutString, verticalDivider,cpuDisplay, ramDisplay, gpuDisplay, hrDisplay, playTimeDisplay, mutedDisplay, unmutedDisplay, darkMode, sendBlank, suppressDuplicates, sendASAP,useMediaManager, useSpotifyApi, appleMusicOnly, spotifySongDisplay, spotifyAccessToken, spotifyRefreshToken, usePulsoid, useHypeRate, hypeRateKey, hypeRateSessionId, timeDisplayPM, timeDisplayAM, showSongInfo, spotify_client_id, useTimeParameters, removeParenthesis, timerDisplay, timerEndStamp]))
           except Exception as e:
             sg.popup('Error saving config to file:\n'+str(e))
           
