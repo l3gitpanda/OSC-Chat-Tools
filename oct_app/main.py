@@ -2303,9 +2303,9 @@ def sendMsg(a):
         if (str(msgOutput) != lastSent) or (not suppressDuplicates) or sentTime > 30:
           if client is not None:
             client.send_message("/chatbox/input", [ str(msgOutput), True, False])
-          lastSent = str(msgOutput)
-          sentTime = 0
-          sendSkipped = False
+            lastSent = str(msgOutput)
+            sentTime = 0
+            sendSkipped = False
         else:
           sendSkipped = True
       msgDelayMemory = message_delay
@@ -2606,6 +2606,11 @@ def runmsg():
   global FileToRead
   global scrollText
   global textStorage
+  # Wait for OSC client to be ready
+  for _ in range(20):
+    if client is not None:
+      break
+    time.sleep(0.1)
   while playMsg:
     textStorage = messageString
     if not afk and not scrollText:
