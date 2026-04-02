@@ -1933,18 +1933,14 @@ if __name__ == "__main__":
   def oscClientDef():
     global client
     while run:
-      # Do not parse process CLI args here; unknown args can prevent client setup.
-      try:
-        port = int(oscSendPort)
-      except (TypeError, ValueError):
-        outputLog(f"Invalid OSC send port '{oscSendPort}', falling back to 9000")
-        port = 9000
+      parser2 = argparse.ArgumentParser()
+      parser2.add_argument("--ip", default=oscSendAddress,
+          help="The ip of the OSC server")
+      parser2.add_argument("--port", type=int, default=oscSendPort,
+          help="The port the OSC server is listening on")
+      args2 = parser2.parse_args()                                                                                        
 
-      try:
-        client = udp_client.SimpleUDPClient(str(oscSendAddress), port)
-      except Exception as e:
-        outputLog(f"Failed to initialize OSC client: {e}")
-
+      client = udp_client.SimpleUDPClient(args2.ip, args2.port)
       time.sleep(.5)
   oscClientDefThread = Thread(target=oscClientDef)
   oscClientDefThread.start()
