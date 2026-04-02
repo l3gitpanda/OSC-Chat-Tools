@@ -8,16 +8,10 @@ import ctypes
 import json
 #import traceback
 import re
-import FreeSimpleGUI as sg
+# FreeSimpleGUI imported lazily in uiThread
 from datetime import datetime, timezone
-from pythonosc import udp_client
-# keyboard, pyperclip imported lazily where used
-import asyncio
-# psutil imported lazily in vrcRunningCheck and cpu/ram plugins
-import webbrowser
-# winsdk, websocket imported lazily in functions that use them
-from pythonosc.dispatcher import Dispatcher
-from pythonosc import osc_server
+# pythonosc, keyboard, pyperclip, asyncio, psutil, webbrowser,
+# winsdk, websocket all imported lazily where used
 import socket
 import hashlib
 import base64
@@ -211,6 +205,7 @@ except:
     os._exit(0)
 
 def fatal_error(error = None):
+  import webbrowser
   global run
   run = False
   ctypes.windll.user32.MessageBoxW(None, u"OSC Chat Tools has encountered a fatal error.", u"OCT Fatal Error", 16)
@@ -383,6 +378,7 @@ async def getMediaSession():
         session = apple_sessions[0] if len(apple_sessions) > 0 else None
     return session
 def mediaIs(state):
+    import asyncio
     import winsdk.windows.media.control as wmc
     session = asyncio.run(getMediaSession())
     if session == None:
@@ -622,6 +618,7 @@ def _load_spotify_tokens_background():
       spotifyRefreshToken = ''
       outputLog("Spotify token load error! Please relink!\nFull Error: "+str(e))
 def uiThread():
+  import FreeSimpleGUI as sg
   global fontColor
   global bgColor
   global accentColor
@@ -1903,6 +1900,7 @@ def processMessage(a):
   return returnList
 
 def oscClientDef():
+  from pythonosc import udp_client
   global client
   while run:
     try:
@@ -2049,6 +2047,7 @@ def oscForwardingManager():
   for forward_socket in forward_sockets:
       forward_socket.close()
 def oscListenServerManager():
+    from pythonosc import osc_server
     global oscListenAddress
     global oscListenPort
     global oscListen
@@ -2203,7 +2202,7 @@ def sendMsg(a):
             "remove_parenthesis": removeParenthesis,
             "window_access": windowAccess,
             "output_log": outputLog,
-            "get_media_info": lambda: asyncio.run(get_media_info()),
+            "get_media_info": lambda: __import__('asyncio').run(get_media_info()),
             "media_is": mediaIs,
             "cpu_display": cpuDisplay,
             "ram_display": ramDisplay,
@@ -2267,6 +2266,7 @@ def sendMsg(a):
                 _port = int(oscSendPort)
               except (TypeError, ValueError):
                 _port = 9000
+              from pythonosc import udp_client
               client = udp_client.SimpleUDPClient(str(oscSendAddress), _port)
               outputLog(f"OSC client created inline: {oscSendAddress}:{_port}")
             client.send_message("/chatbox/input", [ str(msgOutput), True, False])
@@ -2707,6 +2707,7 @@ def run_app():
   global CHATBOX_PLUGIN_REGISTRY
   global dispatcher
   CHATBOX_PLUGIN_REGISTRY = create_default_registry()
+  from pythonosc.dispatcher import Dispatcher
   dispatcher = Dispatcher()
   dispatcher.map("/avatar/parameters/AFK", afk_handler)
   dispatcher.map("/avatar/parameters/VRMode", vr_handler)
@@ -2720,8 +2721,8 @@ def run_app():
   dispatcher.map("/avatar/parameters/PatBool", pat_handler)
   dispatcher.map("/avatar/parameters/Headpat", pat_handler)
   dispatcher.map("/avatar/parameters/Contact/Receiver/Pat", pat_handler)
-  # Create initial OSC client synchronously before starting any threads,
-  # so that client is guaranteed to be available when message sending begins.
+  # Create initial OSC client synchronously before starting any threads.
+  from pythonosc import udp_client
   try:
     port = int(oscSendPort)
   except (TypeError, ValueError):
