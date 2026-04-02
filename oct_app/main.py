@@ -1917,6 +1917,7 @@ def uiThread():
   if logOutput:
     with open('OCT_debug_log.txt', 'a+', encoding="utf-8") as f:
         f.write("\n"+str(datetime.now())+" OCT Shutting down...")
+  os._exit(0)
 def processMessage(a):
   returnList = []
   if messageString.count('\n')>0:
@@ -2751,17 +2752,14 @@ def run_app():
   except Exception as e:
     outputLog(f"Failed to initialize OSC client: {e}")
   # Background thread refreshes client when config changes
-  Thread(target=oscClientDef).start()
-  Thread(target=oscForwardingManager).start()
-  Thread(target=oscListenServerManager).start()
-  vrcRunningCheckThread = Thread(target=vrcRunningCheck)
-  vrcRunningCheckThread.start()
-  msgThread = Thread(target=runmsg)
-  msgThread.start()
-  mainUI = Thread(target=uiThread)
-  mainUI.start()
-  update_checker(False)
-  Thread(target=timeParameterUpdate).start()
+  Thread(target=oscClientDef, daemon=True).start()
+  Thread(target=oscForwardingManager, daemon=True).start()
+  Thread(target=oscListenServerManager, daemon=True).start()
+  Thread(target=vrcRunningCheck, daemon=True).start()
+  Thread(target=runmsg, daemon=True).start()
+  Thread(target=uiThread).start()
+  Thread(target=update_checker, args=(False,), daemon=True).start()
+  Thread(target=timeParameterUpdate, daemon=True).start()
 
 
 def main():
