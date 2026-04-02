@@ -2302,10 +2302,15 @@ def sendMsg(a):
       if playMsg:
         if (str(msgOutput) != lastSent) or (not suppressDuplicates) or sentTime > 30:
           if client is not None:
-            client.send_message("/chatbox/input", [ str(msgOutput), True, False])
+            try:
+              client.send_message("/chatbox/input", [ str(msgOutput), True, False])
+            except Exception as e:
+              outputLog(f"OSC send error: {e}")
             lastSent = str(msgOutput)
             sentTime = 0
             sendSkipped = False
+          else:
+            outputLog("OSC client not ready, skipping send")
         else:
           sendSkipped = True
       msgDelayMemory = message_delay
@@ -2721,6 +2726,19 @@ def vrcRunningCheck():
 
 
 def run_app():
+  global client
+  # Create initial OSC client synchronously before starting any threads,
+  # so that client is guaranteed to be available when message sending begins.
+  try:
+    port = int(oscSendPort)
+  except (TypeError, ValueError):
+    port = 9000
+  try:
+    client = udp_client.SimpleUDPClient(str(oscSendAddress), port)
+    outputLog(f"OSC client initialized: {oscSendAddress}:{port}")
+  except Exception as e:
+    outputLog(f"Failed to initialize OSC client: {e}")
+  # Background thread refreshes client when config changes
   Thread(target=oscClientDef).start()
   Thread(target=oscForwardingManager).start()
   Thread(target=oscListenServerManager).start()
