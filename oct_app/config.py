@@ -6,7 +6,7 @@ from datetime import datetime
 
 @dataclass
 class AppConfig:
-    version: str = "1.5.72"
+    version: str = "1.5.73"
     message_delay: float = 1.5
     messageString: str = ""
     FileToRead: str = ""
