@@ -1,12 +1,11 @@
 from collections import defaultdict
 
-from pynvml import nvmlDeviceGetHandleByIndex, nvmlDeviceGetUtilizationRates, nvmlInit, nvmlShutdown
-
 from ..base import ChatboxPlugin
 
 
 def render_gpu(context, _text, data=0):
     try:
+        from pynvml import nvmlDeviceGetHandleByIndex, nvmlDeviceGetUtilizationRates, nvmlInit, nvmlShutdown
         nvmlInit()
         handle = nvmlDeviceGetHandleByIndex(0)
         info = nvmlDeviceGetUtilizationRates(handle)

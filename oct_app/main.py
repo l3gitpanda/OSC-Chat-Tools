@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pythonosc import udp_client
 # keyboard, pyperclip imported lazily where used
 import asyncio
-import psutil
+# psutil imported lazily in vrcRunningCheck and cpu/ram plugins
 import webbrowser
 # winsdk, websocket imported lazily in functions that use them
 from pythonosc.dispatcher import Dispatcher
@@ -173,9 +173,7 @@ isPat = False
 
 vrcPID = None
 
-if vrcPID is not None:
-    playTimeDat = time.mktime(time.localtime(psutil.Process(vrcPID).create_time()))
-  # old implementation had a possible TypeError here if vrcPID was None, but this should never be the case now since I set it to None explicitly and check for that before trying to use it.
+# vrcPID is always None at startup; playtime is calculated in vrcRunningCheck
 
 client = None
 lastSent = ''
@@ -604,21 +602,25 @@ def loadSpotifyTokens():
   linkedUserName = profile.get('display_name')  
   outputLog("Spotify linked to "+linkedUserName+" successfully!")
   spotifyLinkStatus = 'Linked to '+linkedUserName  
-try:
-  if spotifyAccessToken != '' and spotifyAccessToken != None:
-    loadSpotifyTokens()
-except Exception as e:
-  if "timed out" in str(e): 
-    outputLog('Spotify API Timed out... tokens may be invalid\nFull Error: '+str(e))
-    spotifyLinkStatus = 'Status Unknown'
-  elif "Max retries" in str(e) or "aborted" in str(e):
-    outputLog('Spotify API connection error... tokens may be invalid. Are you connected to the internet?\nFull Error: '+str(e))
-    spotifyLinkStatus = 'Status Unknown'
-  else:
-    spotifyLinkStatus = 'Error - Please Relink!'
-    spotifyAccessToken = ''
-    spotifyRefreshToken = ''
-    outputLog("Spotify token load error! Please relink!\nFull Error: "+str(e))
+def _load_spotify_tokens_background():
+  global spotifyLinkStatus
+  global spotifyAccessToken
+  global spotifyRefreshToken
+  try:
+    if spotifyAccessToken != '' and spotifyAccessToken != None:
+      loadSpotifyTokens()
+  except Exception as e:
+    if "timed out" in str(e):
+      outputLog('Spotify API Timed out... tokens may be invalid\nFull Error: '+str(e))
+      spotifyLinkStatus = 'Status Unknown'
+    elif "Max retries" in str(e) or "aborted" in str(e):
+      outputLog('Spotify API connection error... tokens may be invalid. Are you connected to the internet?\nFull Error: '+str(e))
+      spotifyLinkStatus = 'Status Unknown'
+    else:
+      spotifyLinkStatus = 'Error - Please Relink!'
+      spotifyAccessToken = ''
+      spotifyRefreshToken = ''
+      outputLog("Spotify token load error! Please relink!\nFull Error: "+str(e))
 def uiThread():
   global fontColor
   global bgColor
@@ -2674,6 +2676,7 @@ def restartMsg():
 
 
 def vrcRunningCheck():
+  import psutil
   global vrcPID
   global playTimeDat
   def pid_check(pid):
@@ -2734,6 +2737,7 @@ def run_app():
   Thread(target=oscListenServerManager, daemon=True).start()
   Thread(target=vrcRunningCheck, daemon=True).start()
   Thread(target=runmsg, daemon=True).start()
+  Thread(target=_load_spotify_tokens_background, daemon=True).start()
   Thread(target=uiThread).start()
   Thread(target=timeParameterUpdate, daemon=True).start()
 
