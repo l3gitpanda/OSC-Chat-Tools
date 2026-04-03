@@ -43,7 +43,7 @@ class AppConfig:
     layoutString: str = ""
     verticalDivider: str = "〣"
     animateVerticalDivider: bool = False
-    verticalDividerFrames: str = "〣,〢,〡,〢"
+    verticalDividerFrames: str = "│┃│,┃│┃"
     cpuDisplay: str = "ᴄᴘᴜ: {cpu_percent}%"
     ramDisplay: str = "ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})"
     gpuDisplay: str = "ɢᴘᴜ: {gpu_percent}%"
