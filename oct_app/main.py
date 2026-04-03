@@ -474,7 +474,6 @@ if os.path.isfile('please-do-not-delete.txt'):
             if len(fixed_list) == len(fields):
               confVersion = ver
               matched = True
-              break
           if not matched:
             raise Exception('Data list length mismatch')
         for i, x in enumerate(confDataDict[confVersion]):
