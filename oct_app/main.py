@@ -86,7 +86,7 @@ logOutput = False  #in conf
 layoutString = '' #in conf
 verticalDivider = "〣" #in conf
 animateVerticalDivider = False #in conf
-verticalDividerFrames = "│┃│,┃│┃" #in conf
+verticalDividerFrames = "┃││,│┃│,││┃" #in conf
 dividerFrameIndex = 0
 cpuDisplay = 'ᴄᴘᴜ: {cpu_percent}%'#in conf
 ramDisplay = 'ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})'#in conf
@@ -1144,7 +1144,7 @@ def uiThread():
     window['layoutStorage'].update(value='')
     window['verticalDivider'].update(value='〣')
     window['animateVerticalDivider'].update(value=False)
-    window['verticalDividerFrames'].update(value='│┃│,┃│┃')
+    window['verticalDividerFrames'].update(value='┃││,│┃│,││┃')
     window['cpuDisplay'].update(value='ᴄᴘᴜ: {cpu_percent}%')
     window['ramDisplay'].update(value='ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})')
     window['gpuDisplay'].update(value='ɢᴘᴜ: {gpu_percent}%')
