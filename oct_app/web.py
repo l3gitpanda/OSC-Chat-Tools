@@ -269,8 +269,10 @@ def _read_all_config(m):
         'logOutput': m.logOutput,
         'layoutString': m.layoutString,
         'verticalDivider': m.verticalDivider,
+        'verticalDividerLeft': m.verticalDividerLeft,
         'animateVerticalDivider': m.animateVerticalDivider,
         'verticalDividerFrames': m.verticalDividerFrames,
+        'verticalDividerLeftFrames': m.verticalDividerLeftFrames,
         'cpuDisplay': m.cpuDisplay,
         'ramDisplay': m.ramDisplay,
         'gpuDisplay': m.gpuDisplay,
@@ -340,8 +342,10 @@ def _apply_config(m, data):
         'logOutput': bool,
         'layoutString': str,
         'verticalDivider': str,
+        'verticalDividerLeft': str,
         'animateVerticalDivider': bool,
         'verticalDividerFrames': str,
+        'verticalDividerLeftFrames': str,
         'cpuDisplay': str,
         'ramDisplay': str,
         'gpuDisplay': str,
@@ -444,8 +448,10 @@ def _reset_config(m):
     m.logOutput = False
     m.layoutString = ''
     m.verticalDivider = '\u3023'
+    m.verticalDividerLeft = '\u3023'
     m.animateVerticalDivider = False
     m.verticalDividerFrames = '\u3023,\u3022,\u3021,\u3022'
+    m.verticalDividerLeftFrames = '\u3023,\u3022,\u3021,\u3022'
     m.cpuDisplay = '\u1d04\u1d18\u1d1c: {cpu_percent}%'
     m.ramDisplay = '\u0280\u1d00\u1d0d: {ram_percent}%  ({ram_used}/{ram_total})'
     m.gpuDisplay = '\u0262\u1d18\u1d1c: {gpu_percent}%'
@@ -531,7 +537,8 @@ def _save_config(m):
             m.timeDisplayPM, m.timeDisplayAM, m.showSongInfo,
             m.spotify_client_id, m.useTimeParameters, m.removeParenthesis,
             m.timerDisplay, m.timerEndStamp, m.animateVerticalDivider,
-            m.verticalDividerFrames,
+            m.verticalDividerFrames, m.verticalDividerLeft,
+            m.verticalDividerLeftFrames,
             # New text feature config
             m.textStyle, m.flipText, m.mirrorText, m.zalgoEnabled,
             m.zalgoIntensity, m.kaomojiCategory, m.textAccentFrames,

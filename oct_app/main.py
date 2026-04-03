@@ -85,8 +85,10 @@ oscForeword = False #in conf
 logOutput = False  #in conf
 layoutString = '' #in conf
 verticalDivider = "〣" #in conf
+verticalDividerLeft = "〣" #in conf
 animateVerticalDivider = False #in conf
 verticalDividerFrames = "〣,〢,〡,〢" #in conf
+verticalDividerLeftFrames = "〣,〢,〡,〢" #in conf
 dividerFrameIndex = 0
 cpuDisplay = 'ᴄᴘᴜ: {cpu_percent}%'#in conf
 ramDisplay = 'ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})'#in conf
@@ -454,7 +456,7 @@ confDataDict = { #this dictionary will always exclude position 0 which is the co
   "1.5.72" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.73" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.74" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames'],
-  "1.5.75" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames', 'textStyle', 'flipText', 'mirrorText', 'zalgoEnabled', 'zalgoIntensity', 'kaomojiCategory', 'textAccentFrames', 'eightBallDisplay', 'eightBallInterval', 'diceDisplay', 'diceSides', 'diceCount', 'diceInterval', 'fortuneDisplay', 'fortuneFile', 'fortuneInterval', 'typewriterSpeed', 'cyclerMessages', 'cyclerInterval', 'reactionDisplay', 'reactionLabel', 'borderStyle', 'marqueeWidth', 'marqueeSpeed', 'textAlignment', 'textAlignWidth', 'smartTruncateMax', 'animateFrames', 'animateSpeed']
+  "1.5.75" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames', 'verticalDividerLeft', 'verticalDividerLeftFrames', 'textStyle', 'flipText', 'mirrorText', 'zalgoEnabled', 'zalgoIntensity', 'kaomojiCategory', 'textAccentFrames', 'eightBallDisplay', 'eightBallInterval', 'diceDisplay', 'diceSides', 'diceCount', 'diceInterval', 'fortuneDisplay', 'fortuneFile', 'fortuneInterval', 'typewriterSpeed', 'cyclerMessages', 'cyclerInterval', 'reactionDisplay', 'reactionLabel', 'borderStyle', 'marqueeWidth', 'marqueeSpeed', 'textAlignment', 'textAlignWidth', 'smartTruncateMax', 'animateFrames', 'animateSpeed']
 }
 
 if os.path.isfile('please-do-not-delete.txt'):
@@ -1006,18 +1008,22 @@ def sendMsg(a):
 
           if animateVerticalDivider:
             frames = [f.strip() for f in verticalDividerFrames.split(',') if f.strip()]
+            leftFrames = [f.strip() for f in verticalDividerLeftFrames.split(',') if f.strip()]
             if frames:
               currentDivider = frames[dividerFrameIndex % len(frames)]
+              currentDividerLeft = leftFrames[dividerFrameIndex % len(leftFrames)] if leftFrames else verticalDividerLeft
               dividerFrameIndex = (dividerFrameIndex + 1) % len(frames)
             else:
               currentDivider = verticalDivider
+              currentDividerLeft = verticalDividerLeft
           else:
             currentDivider = verticalDivider
+            currentDividerLeft = verticalDividerLeft
 
           def checkData(msg, data):
             lf = "\v"
             if data & 4:
-              msg = currentDivider + " " + msg
+              msg = currentDividerLeft + " " + msg
             if data & 1:
               msg = msg + " " + currentDivider
             if data & 2:
@@ -1142,10 +1148,10 @@ def sendMsg(a):
             msgOutput = msgOutput[:-2]
           if "\v" in msgOutput[-2:]:
             msgOutput = msgOutput[:-1]
-          if msgOutput.startswith(currentDivider + " "):
-            msgOutput = msgOutput[len(currentDivider) + 1:]
-          msgOutput = msgOutput.replace("\v" + currentDivider + " ", "\v")
-          msgOutput = msgOutput.replace(currentDivider + " " + currentDivider, currentDivider)
+          if msgOutput.startswith(currentDividerLeft + " "):
+            msgOutput = msgOutput[len(currentDividerLeft) + 1:]
+          msgOutput = msgOutput.replace("\v" + currentDividerLeft + " ", "\v")
+          msgOutput = msgOutput.replace(currentDivider + " " + currentDividerLeft, currentDivider)
           if not hideOutside:
             msgOutput = topBar + " " + msgOutput + " " + bottomBar
           msgOutput = msgOutput.replace("\\n", "\v").replace("\\v", "\v")

@@ -67,7 +67,7 @@
                     </div>
                     <div class="layout-arrange-col">
                         <h3>Arrange Elements</h3>
-                        <p class="hint">&#x21A5; = New Line &ensp; &#x250B;&#x2192; = Divider Before &ensp; &#x2192;&#x250B; = Divider After</p>
+                        <p class="hint">&#x21A5; = New Line &ensp; &#x250B;&#x2190; = Divider Before &ensp; &#x2192;&#x250B; = Divider After</p>
                         <div id="layout-editor"></div>
                         <h3>Manual Edit <button class="btn-small" onclick="showManualHelp()">?</button></h3>
                         <p class="hint">Wrap object in { }. Spaces are respected.</p>
@@ -271,11 +271,15 @@ By Lioncat6</textarea>
                         <input type="text" id="middleBar">
                         <label>Bottom Divider:</label>
                         <input type="text" id="bottomBar">
-                        <label>Vertical Divider:</label>
+                        <label>Vertical Divider (Right):</label>
                         <input type="text" id="verticalDivider">
+                        <label>Vertical Divider (Left):</label>
+                        <input type="text" id="verticalDividerLeft">
                         <label class="checkbox-label"><input type="checkbox" id="animateVerticalDivider"> Animate Vertical Divider</label>
-                        <label>Animation Frames (comma-separated):</label>
+                        <label>Animation Frames Right (comma-separated):</label>
                         <input type="text" id="verticalDividerFrames">
+                        <label>Animation Frames Left (comma-separated):</label>
+                        <input type="text" id="verticalDividerLeftFrames">
                         <label class="checkbox-label"><input type="checkbox" id="hideOutside" checked> Remove outside dividers</label>
                     </div>
                 </div>
