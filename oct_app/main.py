@@ -932,6 +932,8 @@ def sendMsg(a):
     global verticalDivider
     global animateVerticalDivider
     global verticalDividerFrames
+    global verticalDividerLeft
+    global verticalDividerLeftFrames
     global dividerFrameIndex
     global cpuDisplay
     global ramDisplay
@@ -997,6 +999,8 @@ def sendMsg(a):
           global verticalDivider
           global animateVerticalDivider
           global verticalDividerFrames
+          global verticalDividerLeft
+          global verticalDividerLeftFrames
           global dividerFrameIndex
           global msgOutput
           global spotifySongUrl
