@@ -468,7 +468,14 @@ if os.path.isfile('please-do-not-delete.txt'):
         confVersion = fixed_list[0]
         confLoaderIterator = 1
         if len(fixed_list) != len(confDataDict[confVersion]):
-          raise Exception('Data list length mismatch')
+          # Try to find a version entry with matching length (handles format migrations)
+          matched = False
+          for ver, fields in confDataDict.items():
+            if len(fixed_list) == len(fields):
+              confVersion = ver
+              matched = True
+          if not matched:
+            raise Exception('Data list length mismatch')
         for i, x in enumerate(confDataDict[confVersion]):
           globals()[x] = fixed_list[i]
           #print(f"{x} = {fixed_list[i]}")
