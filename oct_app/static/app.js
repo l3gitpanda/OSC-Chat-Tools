@@ -429,7 +429,7 @@ function renderLayoutEditor(layoutStr) {
             <button onclick="moveLayoutElement(${i}, 'up')" ${i === 0 ? 'disabled' : ''} title="Move up">\u2B06</button>
             <button onclick="moveLayoutElement(${i}, 'down')" ${i === items.length - 1 ? 'disabled' : ''} title="Move down">\u2B07</button>
             <span class="item-name">${getDisplayName(item)}</span>
-            <label title="Divider before"><input type="checkbox" data-opt="before" ${opts.dividerBefore ? 'checked' : ''}> \u250B\u2192</label>
+            <label title="Divider before"><input type="checkbox" data-opt="before" ${opts.dividerBefore ? 'checked' : ''}> \u250B\u2190</label>
             <label title="Divider after"><input type="checkbox" data-opt="after" ${opts.dividerAfter ? 'checked' : ''}> \u2192\u250B</label>
             <label title="New line"><input type="checkbox" data-opt="newline" ${opts.newLine ? 'checked' : ''}> \u21A5</label>
         `;
