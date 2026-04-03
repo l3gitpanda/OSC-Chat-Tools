@@ -373,10 +373,24 @@ async def getMediaSession():
         apple_sessions = [x for x in list(sessions.get_sessions()) if "applemusic" in str(x.source_app_user_model_id).lower() or "applemusicwin" in str(x.source_app_user_model_id).lower()]
         session = apple_sessions[0] if len(apple_sessions) > 0 else None
     return session
+_media_loop = None
+_media_loop_lock = threading.Lock()
+
+def _get_media_loop():
+    global _media_loop
+    if _media_loop is None or _media_loop.is_closed():
+        with _media_loop_lock:
+            if _media_loop is None or _media_loop.is_closed():
+                import asyncio
+                _media_loop = asyncio.new_event_loop()
+    return _media_loop
+
+def _run_async_media_info():
+    return _get_media_loop().run_until_complete(get_media_info())
+
 def mediaIs(state):
-    import asyncio
     import winsdk.windows.media.control as wmc
-    session = asyncio.run(getMediaSession())
+    session = _get_media_loop().run_until_complete(getMediaSession())
     if session == None:
         return False
     return int(wmc.GlobalSystemMediaTransportControlsSessionPlaybackStatus[state]) == session.get_playback_info().playback_status
@@ -633,16 +647,22 @@ def processMessage(a):
 def oscClientDef():
   from pythonosc import udp_client
   global client
+  _last_address = None
+  _last_port = None
   while run:
     try:
       port = int(oscSendPort)
     except (TypeError, ValueError):
       outputLog(f"Invalid OSC send port '{oscSendPort}', falling back to 9000")
       port = 9000
-    try:
-      client = udp_client.SimpleUDPClient(str(oscSendAddress), port)
-    except Exception as e:
-      outputLog(f"Failed to initialize OSC client: {e}")
+    current_address = str(oscSendAddress)
+    if current_address != _last_address or port != _last_port:
+      try:
+        client = udp_client.SimpleUDPClient(current_address, port)
+        _last_address = current_address
+        _last_port = port
+      except Exception as e:
+        outputLog(f"Failed to initialize OSC client: {e}")
     time.sleep(.5)
 
 dispatcher = None
@@ -907,7 +927,7 @@ def sendMsg(a):
             frames = [f.strip() for f in verticalDividerFrames.split(',') if f.strip()]
             if frames:
               currentDivider = frames[dividerFrameIndex % len(frames)]
-              dividerFrameIndex += 1
+              dividerFrameIndex = (dividerFrameIndex + 1) % len(frames)
             else:
               currentDivider = verticalDivider
           else:
@@ -946,7 +966,7 @@ def sendMsg(a):
             "remove_parenthesis": removeParenthesis,
             "window_access": None,
             "output_log": outputLog,
-            "get_media_info": lambda: __import__('asyncio').run(get_media_info()),
+            "get_media_info": _run_async_media_info,
             "media_is": mediaIs,
             "cpu_display": cpuDisplay,
             "ram_display": ramDisplay,
@@ -1107,6 +1127,10 @@ def hrConnectionThread():
                           heartRate = 1
                       except Exception as e:
                         outputLog('Refreshing hyperate...')
+                        try:
+                          ws.close()
+                        except Exception:
+                          pass
                         ws = create_connection(url)
                         ws.send(json.dumps(join_msg))
                     client.send_message("/avatar/parameters/isHRActive", True)
@@ -1117,10 +1141,18 @@ def hrConnectionThread():
                     if not 'Connection timed out' in str(e):
                       outputLog(str(e))
                       hrConnected = False
+                      try:
+                        ws.close()
+                      except Exception:
+                        pass
                       break
                     pass
                     time.sleep(.01)
                   if not run or not hrConnected:
+                      try:
+                        ws.close()
+                      except Exception:
+                        pass
                       break
           heartRateListenThread = Thread(target=heartRateListen)
           heartRateListenThread.start()
