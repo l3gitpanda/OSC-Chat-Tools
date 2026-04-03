@@ -96,6 +96,37 @@ playTimeDisplay = '⏳{hours}:{remainder_minutes}'#in conf
 mutedDisplay = 'Muted 🔇'#in conf
 unmutedDisplay = '🔊'#in conf
 darkMode = True #in conf
+# New text feature globals
+textStyle = 'none' #in conf
+flipText = False #in conf
+mirrorText = False #in conf
+zalgoEnabled = False #in conf
+zalgoIntensity = 2 #in conf
+kaomojiCategory = 'random' #in conf
+textAccentFrames = '✧,✦,★,☆,✶,✷' #in conf
+eightBallDisplay = '🎱 {response}' #in conf
+eightBallInterval = 30 #in conf
+diceDisplay = '🎲 {result}' #in conf
+diceSides = 6 #in conf
+diceCount = 1 #in conf
+diceInterval = 30 #in conf
+fortuneDisplay = '🥠 {fortune}' #in conf
+fortuneFile = '' #in conf
+fortuneInterval = 60 #in conf
+typewriterSpeed = 2 #in conf
+cyclerMessages = '' #in conf
+cyclerInterval = 5 #in conf
+reactionDisplay = '💜 {label}: {count}' #in conf
+reactionLabel = 'Headpats' #in conf
+borderStyle = 'double' #in conf
+marqueeWidth = 20 #in conf
+marqueeSpeed = 1 #in conf
+textAlignment = 'left' #in conf
+textAlignWidth = 30 #in conf
+smartTruncateMax = 144 #in conf
+animateFrames = '[ Loading . ],[ Loading .. ],[ Loading ... ]' #in conf
+animateSpeed = 1 #in conf
+sparkleFrameIndex = 0
 sendBlank = True
 suppressDuplicates = False
 sendASAP = False
@@ -422,7 +453,8 @@ confDataDict = { #this dictionary will always exclude position 0 which is the co
   "1.5.71" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.72" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.73" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
-  "1.5.74" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames']
+  "1.5.74" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames'],
+  "1.5.75" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames', 'textStyle', 'flipText', 'mirrorText', 'zalgoEnabled', 'zalgoIntensity', 'kaomojiCategory', 'textAccentFrames', 'eightBallDisplay', 'eightBallInterval', 'diceDisplay', 'diceSides', 'diceCount', 'diceInterval', 'fortuneDisplay', 'fortuneFile', 'fortuneInterval', 'typewriterSpeed', 'cyclerMessages', 'cyclerInterval', 'reactionDisplay', 'reactionLabel', 'borderStyle', 'marqueeWidth', 'marqueeSpeed', 'textAlignment', 'textAlignWidth', 'smartTruncateMax', 'animateFrames', 'animateSpeed']
 }
 
 if os.path.isfile('please-do-not-delete.txt'):
@@ -859,6 +891,22 @@ def oscListenServerManager():
         time.sleep(.5)
 
 
+_BORDER_STYLES = {
+    "double":  ("╔═════════════╗", "╠═════════════╣", "╚═════════════╝"),
+    "rounded": ("╭─────────────╮", "├─────────────┤", "╰─────────────╯"),
+    "light":   ("┌─────────────┐", "├─────────────┤", "└─────────────┘"),
+    "heavy":   ("┏━━━━━━━━━━━━━┓", "┣━━━━━━━━━━━━━┫", "┗━━━━━━━━━━━━━┛"),
+    "fancy":   ("♢═════════════♢", "◈═════════════◈", "♢═════════════♢"),
+    "ascii":   ("+-------------+", "+-------------+", "+-------------+"),
+}
+
+
+def _apply_border_style():
+    global topBar, middleBar, bottomBar, borderStyle
+    if borderStyle in _BORDER_STYLES:
+        topBar, middleBar, bottomBar = _BORDER_STYLES[borderStyle]
+
+
 def sendMsg(a):
     global msgOutput
     global message_delay
@@ -893,6 +941,37 @@ def sendMsg(a):
     global playTimeDat
     global timeDisplayAM
     global timeDisplayPM
+    # New text feature globals
+    global textStyle
+    global flipText
+    global mirrorText
+    global zalgoEnabled
+    global zalgoIntensity
+    global kaomojiCategory
+    global textAccentFrames
+    global eightBallDisplay
+    global eightBallInterval
+    global diceDisplay
+    global diceSides
+    global diceCount
+    global diceInterval
+    global fortuneDisplay
+    global fortuneFile
+    global fortuneInterval
+    global typewriterSpeed
+    global cyclerMessages
+    global cyclerInterval
+    global reactionDisplay
+    global reactionLabel
+    global borderStyle
+    global marqueeWidth
+    global marqueeSpeed
+    global textAlignment
+    global textAlignWidth
+    global smartTruncateMax
+    global animateFrames
+    global animateSpeed
+    global sparkleFrameIndex
     #stupid crap
     global letsGetThatTime
     global songInfo
@@ -907,6 +986,7 @@ def sendMsg(a):
     global timeVar
     try:
      timeVar = time.time()
+     _apply_border_style()
      if playMsg:
       #message Assembler:
       if not scrollText and not afk:
@@ -979,6 +1059,36 @@ def sendMsg(a):
             "vrc_pid": vrcPID,
             "song_info": '',
             "spotify_song_url": spotifySongUrl,
+            # New text feature context
+            "text_style": textStyle,
+            "flip_text": flipText,
+            "mirror_text": mirrorText,
+            "zalgo_enabled": zalgoEnabled,
+            "zalgo_intensity": zalgoIntensity,
+            "kaomoji_category": kaomojiCategory,
+            "text_accent_frames": textAccentFrames,
+            "sparkle_frame_index": sparkleFrameIndex,
+            "eightball_display": eightBallDisplay,
+            "eightball_interval": eightBallInterval,
+            "dice_display": diceDisplay,
+            "dice_sides": diceSides,
+            "dice_count": diceCount,
+            "dice_interval": diceInterval,
+            "fortune_display": fortuneDisplay,
+            "fortune_file": fortuneFile,
+            "fortune_interval": fortuneInterval,
+            "typewriter_speed": typewriterSpeed,
+            "cycler_messages": cyclerMessages,
+            "cycler_interval": cyclerInterval,
+            "reaction_display": reactionDisplay,
+            "reaction_label": reactionLabel,
+            "marquee_width": marqueeWidth,
+            "marquee_speed": marqueeSpeed,
+            "text_alignment": textAlignment,
+            "text_align_width": textAlignWidth,
+            "smart_truncate_max": smartTruncateMax,
+            "animate_frames": animateFrames,
+            "animate_speed": animateSpeed,
           }
 
           text = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("text", plugin_context, a, data)
@@ -993,6 +1103,21 @@ def sendMsg(a):
           div = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("div", plugin_context, a, data)
           mute = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("mute", plugin_context, a, data)
           playtime = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("playtime", plugin_context, a, data)
+          textstyle = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("textstyle", plugin_context, a, data)
+          fliptext = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("fliptext", plugin_context, a, data)
+          zalgo = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("zalgo", plugin_context, a, data)
+          kaomoji = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("kaomoji", plugin_context, a, data)
+          sparkle = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("sparkle", plugin_context, a, data)
+          eightball = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("8ball", plugin_context, a, data)
+          dice = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("dice", plugin_context, a, data)
+          fortune = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("fortune", plugin_context, a, data)
+          typewriter = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("typewriter", plugin_context, a, data)
+          cycler = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("cycler", plugin_context, a, data)
+          reaction = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("reaction", plugin_context, a, data)
+          marquee = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("marquee", plugin_context, a, data)
+          textalign = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("textalign", plugin_context, a, data)
+          smarttruncate = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("smarttruncate", plugin_context, a, data)
+          animate = lambda data=0: CHATBOX_PLUGIN_REGISTRY.render("animate", plugin_context, a, data)
 
           try:
             msgOutput = eval("f'"f'{layoutString}'"'")
@@ -1004,6 +1129,7 @@ def sendMsg(a):
           songName = plugin_context["song_name"]
           tickCount = plugin_context["tick_count"]
           spotifySongUrl = plugin_context["spotify_song_url"]
+          sparkleFrameIndex = plugin_context.get("sparkle_frame_index", 0)
 
           if msgOutput[-len(currentDivider+" "): ] == currentDivider+" ":
             msgOutput = msgOutput[:-len(currentDivider+" ")-1]
