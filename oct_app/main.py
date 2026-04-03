@@ -1000,6 +1000,7 @@ def sendMsg(a):
           global spotifySongUrl
           global songName
           global tickCount
+          global sparkleFrameIndex
           global timerEndStamp
           global timerVar
 
