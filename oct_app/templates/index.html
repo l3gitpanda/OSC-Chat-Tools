@@ -48,6 +48,21 @@
                             <div class="element-row"><span class="el-icon">&#x2328;</span><span class="el-name">STT</span><span class="el-desc">Speech recognition</span><button class="btn" disabled>Coming Soon</button></div>
                             <div class="element-row"><span class="el-icon">&#x2635;</span><span class="el-name">Divider</span><span class="el-desc">Horizontal Divider</span><button class="btn" onclick="addLayoutElement('div(0)')">Add to Layout</button></div>
                             <div class="element-row"><span class="el-icon">&#x23F2;</span><span class="el-name">Timer</span><span class="el-desc">Countdown Timer</span><button class="btn" onclick="addLayoutElement('timer(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F520;</span><span class="el-name">Text Style</span><span class="el-desc">Unicode styled text (bold, italic, etc.)</span><button class="btn" onclick="addLayoutElement('textstyle(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F643;</span><span class="el-name">Flip Text</span><span class="el-desc">Upside-down / mirror text</span><button class="btn" onclick="addLayoutElement('fliptext(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F47E;</span><span class="el-name">Zalgo</span><span class="el-desc">Creepy glitch text effect</span><button class="btn" onclick="addLayoutElement('zalgo(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F60A;</span><span class="el-name">Kaomoji</span><span class="el-desc">Random emoticons</span><button class="btn" onclick="addLayoutElement('kaomoji(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2728;</span><span class="el-name">Sparkle</span><span class="el-desc">Animated accent text</span><button class="btn" onclick="addLayoutElement('sparkle(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F3B1;</span><span class="el-name">8-Ball</span><span class="el-desc">Magic 8-Ball responses</span><button class="btn" onclick="addLayoutElement('eightball(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F3B2;</span><span class="el-name">Dice</span><span class="el-desc">Random dice roller</span><button class="btn" onclick="addLayoutElement('dice(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F960;</span><span class="el-name">Fortune</span><span class="el-desc">Random quotes / fortunes</span><button class="btn" onclick="addLayoutElement('fortune(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2328;</span><span class="el-name">Typewriter</span><span class="el-desc">Progressive text reveal</span><button class="btn" onclick="addLayoutElement('typewriter(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F504;</span><span class="el-name">Cycler</span><span class="el-desc">Cycle through messages</span><button class="btn" onclick="addLayoutElement('cycler(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F49C;</span><span class="el-name">Reaction</span><span class="el-desc">Trackable counter (headpats, etc.)</span><button class="btn" onclick="addLayoutElement('reaction(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F4CB;</span><span class="el-name">Marquee</span><span class="el-desc">LED-style scrolling text</span><button class="btn" onclick="addLayoutElement('marquee(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2194;</span><span class="el-name">Text Align</span><span class="el-desc">Aligned text (left/center/right)</span><button class="btn" onclick="addLayoutElement('textalign(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2702;</span><span class="el-name">Smart Truncate</span><span class="el-desc">Auto-shorten long text</span><button class="btn" onclick="addLayoutElement('smarttruncate(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F3AC;</span><span class="el-name">Animate</span><span class="el-desc">Custom frame animation</span><button class="btn" onclick="addLayoutElement('animate(0)')">Add to Layout</button></div>
                         </div>
                     </div>
                     <div class="layout-arrange-col">
@@ -77,6 +92,22 @@
                     <button class="sub-tab-btn" data-subtab="beh-stt">&#x2328;STT</button>
                     <button class="sub-tab-btn" data-subtab="beh-divider">&#x2635;Divider</button>
                     <button class="sub-tab-btn" data-subtab="beh-timer">&#x23F2;Timer</button>
+                    <button class="sub-tab-btn" data-subtab="beh-textstyle">&#x1F520;Text Style</button>
+                    <button class="sub-tab-btn" data-subtab="beh-fliptext">&#x1F643;Flip</button>
+                    <button class="sub-tab-btn" data-subtab="beh-zalgo">&#x1F47E;Zalgo</button>
+                    <button class="sub-tab-btn" data-subtab="beh-kaomoji">&#x1F60A;Kaomoji</button>
+                    <button class="sub-tab-btn" data-subtab="beh-sparkle">&#x2728;Sparkle</button>
+                    <button class="sub-tab-btn" data-subtab="beh-8ball">&#x1F3B1;8-Ball</button>
+                    <button class="sub-tab-btn" data-subtab="beh-dice">&#x1F3B2;Dice</button>
+                    <button class="sub-tab-btn" data-subtab="beh-fortune">&#x1F960;Fortune</button>
+                    <button class="sub-tab-btn" data-subtab="beh-typewriter">&#x2328;Typewriter</button>
+                    <button class="sub-tab-btn" data-subtab="beh-cycler">&#x1F504;Cycler</button>
+                    <button class="sub-tab-btn" data-subtab="beh-reaction">&#x1F49C;Reaction</button>
+                    <button class="sub-tab-btn" data-subtab="beh-marquee">&#x1F4CB;Marquee</button>
+                    <button class="sub-tab-btn" data-subtab="beh-textalign">&#x2194;Align</button>
+                    <button class="sub-tab-btn" data-subtab="beh-smarttruncate">&#x2702;Truncate</button>
+                    <button class="sub-tab-btn" data-subtab="beh-animate">&#x1F3AC;Animate</button>
+                    <button class="sub-tab-btn" data-subtab="beh-borderstyle">&#x1F5BC;Borders</button>
                 </div>
 
                 <!-- Misc -->
@@ -261,6 +292,207 @@ By Lioncat6</textarea>
                             <label>Seconds: <input type="number" id="addSeconds" min="0" style="width:60px"> <button class="btn-small" onclick="addTimer('seconds')">Add</button></label>
                             <button class="btn" onclick="resetTimer()">Reset Timer</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Text Style -->
+                <div class="sub-tab-panel" id="beh-textstyle">
+                    <div class="form-section">
+                        <label>Unicode text style for the Text Style element:</label>
+                        <select id="textStyle">
+                            <option value="none">None</option>
+                            <option value="bold">&#x1D401;&#x1D428;&#x1D425;&#x1D41D; (Bold)</option>
+                            <option value="italic">&#x1D608;&#x1D613;&#x1D60A;&#x1D612;&#x1D608;&#x1D610; (Italic)</option>
+                            <option value="bolditalic">&#x1D63D;&#x1D652;&#x1D64D;&#x1D641; &#x1D644;&#x1D653;&#x1D64A;&#x1D64D;&#x1D648;&#x1D640; (Bold Italic)</option>
+                            <option value="smallcaps">&#x1D00;&#x1D0D;&#x1D00;&#x29F;&#x29F; &#x1D04;&#x1D00;&#x1D18;&#x1D00; (Small Caps)</option>
+                            <option value="superscript">&#x1D43;&#x1D58;&#x1D56;&#x1D49;&#x1D3F;&#x1D48;&#x1D9C;&#x1D3F;&#x2071;&#x1D56;&#x1D57; (Superscript)</option>
+                            <option value="boxed">&#x1F171;&#x1F17E;&#x1F187;&#x1F174;&#x1F173; (Boxed)</option>
+                            <option value="circled">&#x24B8;&#x24BE;&#x24C7;&#x24B8;&#x24C1;&#x24BA;&#x24B9; (Circled)</option>
+                            <option value="wide">&#xFF37;&#xFF29;&#xFF24;&#xFF25; (Wide)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Flip Text -->
+                <div class="sub-tab-panel" id="beh-fliptext">
+                    <div class="form-section">
+                        <label class="checkbox-label"><input type="checkbox" id="flipText"> Flip text upside-down</label>
+                        <label class="checkbox-label"><input type="checkbox" id="mirrorText"> Mirror text</label>
+                    </div>
+                </div>
+
+                <!-- Zalgo -->
+                <div class="sub-tab-panel" id="beh-zalgo">
+                    <div class="form-section">
+                        <label class="checkbox-label"><input type="checkbox" id="zalgoEnabled"> Enable Zalgo text effect</label>
+                        <label>Intensity (1=light, 2=medium, 3=heavy):</label>
+                        <input type="range" id="zalgoIntensity" min="1" max="3" step="1" value="2">
+                        <span id="zalgoIntensity-val">2</span>
+                    </div>
+                </div>
+
+                <!-- Kaomoji -->
+                <div class="sub-tab-panel" id="beh-kaomoji">
+                    <div class="form-section">
+                        <label>Kaomoji category:</label>
+                        <select id="kaomojiCategory">
+                            <option value="random">Random</option>
+                            <option value="happy">Happy</option>
+                            <option value="sad">Sad</option>
+                            <option value="shrug">Shrug</option>
+                            <option value="dance">Dance</option>
+                            <option value="love">Love</option>
+                            <option value="angry">Angry</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sparkle -->
+                <div class="sub-tab-panel" id="beh-sparkle">
+                    <div class="form-section">
+                        <label>Accent animation frames (comma-separated):</label>
+                        <input type="text" id="textAccentFrames" value="✧,✦,★,☆,✶,✷">
+                    </div>
+                </div>
+
+                <!-- 8-Ball -->
+                <div class="sub-tab-panel" id="beh-8ball">
+                    <div class="form-section">
+                        <label>Display template. Variables: {response}</label>
+                        <input type="text" id="eightBallDisplay">
+                        <label>Seconds between new responses:</label>
+                        <input type="range" id="eightBallInterval" min="5" max="120" step="5" value="30">
+                        <span id="eightBallInterval-val">30</span>
+                    </div>
+                </div>
+
+                <!-- Dice -->
+                <div class="sub-tab-panel" id="beh-dice">
+                    <div class="form-section">
+                        <label>Display template. Variables: {result}</label>
+                        <input type="text" id="diceDisplay">
+                        <label>Number of sides:</label>
+                        <select id="diceSides">
+                            <option value="6">d6</option>
+                            <option value="8">d8</option>
+                            <option value="12">d12</option>
+                            <option value="20">d20</option>
+                        </select>
+                        <label>Number of dice (1-4):</label>
+                        <input type="range" id="diceCount" min="1" max="4" step="1" value="1">
+                        <span id="diceCount-val">1</span>
+                        <label>Seconds between re-rolls:</label>
+                        <input type="range" id="diceInterval" min="5" max="120" step="5" value="30">
+                        <span id="diceInterval-val">30</span>
+                    </div>
+                </div>
+
+                <!-- Fortune -->
+                <div class="sub-tab-panel" id="beh-fortune">
+                    <div class="form-section">
+                        <label>Display template. Variables: {fortune}</label>
+                        <input type="text" id="fortuneDisplay">
+                        <label>Custom quotes file path (one per line, leave blank for built-in):</label>
+                        <input type="text" id="fortuneFile" placeholder="path/to/quotes.txt">
+                        <label>Seconds between new fortunes:</label>
+                        <input type="range" id="fortuneInterval" min="10" max="300" step="10" value="60">
+                        <span id="fortuneInterval-val">60</span>
+                    </div>
+                </div>
+
+                <!-- Typewriter -->
+                <div class="sub-tab-panel" id="beh-typewriter">
+                    <div class="form-section">
+                        <label>Characters revealed per tick:</label>
+                        <input type="range" id="typewriterSpeed" min="1" max="10" step="1" value="2">
+                        <span id="typewriterSpeed-val">2</span>
+                    </div>
+                </div>
+
+                <!-- Cycler -->
+                <div class="sub-tab-panel" id="beh-cycler">
+                    <div class="form-section">
+                        <label>Messages to cycle through (pipe-separated):</label>
+                        <textarea id="cyclerMessages" rows="4" spellcheck="false" placeholder="Hello!|How are you?|Have a great day!"></textarea>
+                        <label>Ticks between message switches:</label>
+                        <input type="range" id="cyclerInterval" min="1" max="20" step="1" value="5">
+                        <span id="cyclerInterval-val">5</span>
+                    </div>
+                </div>
+
+                <!-- Reaction -->
+                <div class="sub-tab-panel" id="beh-reaction">
+                    <div class="form-section">
+                        <label>Display template. Variables: {count}, {label}</label>
+                        <input type="text" id="reactionDisplay">
+                        <label>Reaction label:</label>
+                        <input type="text" id="reactionLabel" value="Headpats">
+                        <p>Current count: <span id="reactionCount">0</span></p>
+                        <button class="btn" onclick="incrementReaction()">+1</button>
+                        <button class="btn" onclick="resetReaction()">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Marquee -->
+                <div class="sub-tab-panel" id="beh-marquee">
+                    <div class="form-section">
+                        <label>Visible window width (characters):</label>
+                        <input type="range" id="marqueeWidth" min="5" max="50" step="1" value="20">
+                        <span id="marqueeWidth-val">20</span>
+                        <label>Scroll speed (chars per tick):</label>
+                        <input type="range" id="marqueeSpeed" min="1" max="5" step="1" value="1">
+                        <span id="marqueeSpeed-val">1</span>
+                    </div>
+                </div>
+
+                <!-- Text Align -->
+                <div class="sub-tab-panel" id="beh-textalign">
+                    <div class="form-section">
+                        <label>Text alignment:</label>
+                        <select id="textAlignment">
+                            <option value="left">Left</option>
+                            <option value="center">Center</option>
+                            <option value="right">Right</option>
+                        </select>
+                        <label>Alignment width (characters):</label>
+                        <input type="range" id="textAlignWidth" min="10" max="60" step="1" value="30">
+                        <span id="textAlignWidth-val">30</span>
+                    </div>
+                </div>
+
+                <!-- Smart Truncate -->
+                <div class="sub-tab-panel" id="beh-smarttruncate">
+                    <div class="form-section">
+                        <label>Maximum text length before truncation:</label>
+                        <input type="range" id="smartTruncateMax" min="50" max="144" step="1" value="144">
+                        <span id="smartTruncateMax-val">144</span>
+                    </div>
+                </div>
+
+                <!-- Animate -->
+                <div class="sub-tab-panel" id="beh-animate">
+                    <div class="form-section">
+                        <label>Animation frames (comma-separated):</label>
+                        <textarea id="animateFrames" rows="3" spellcheck="false" placeholder="[ Loading . ],[ Loading .. ],[ Loading ... ]"></textarea>
+                        <label>Ticks per frame:</label>
+                        <input type="range" id="animateSpeed" min="1" max="10" step="1" value="1">
+                        <span id="animateSpeed-val">1</span>
+                    </div>
+                </div>
+
+                <!-- Border Styles -->
+                <div class="sub-tab-panel" id="beh-borderstyle">
+                    <div class="form-section">
+                        <label>Border style preset:</label>
+                        <select id="borderStyle">
+                            <option value="double">Double (default)</option>
+                            <option value="rounded">Rounded</option>
+                            <option value="light">Light</option>
+                            <option value="heavy">Heavy</option>
+                            <option value="fancy">Fancy</option>
+                            <option value="ascii">ASCII</option>
+                        </select>
+                        <p class="hint">This overrides the manual Top/Middle/Bottom divider fields when set.</p>
                     </div>
                 </div>
             </div>

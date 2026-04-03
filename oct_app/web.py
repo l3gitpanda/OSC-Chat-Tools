@@ -139,6 +139,19 @@ def create_app():
         m.timerEndStamp = int(datetime.now().timestamp() * 1000)
         return jsonify({'timerEndStamp': m.timerEndStamp})
 
+    # ---- REST API: Reaction counter ----
+    @app.route('/api/reaction/increment', methods=['POST'])
+    def reaction_increment():
+        from .plugins.builtin.reaction import increment
+        count = increment()
+        return jsonify({'count': count})
+
+    @app.route('/api/reaction/reset', methods=['POST'])
+    def reaction_reset():
+        from .plugins.builtin.reaction import reset
+        reset()
+        return jsonify({'count': 0})
+
     # ---- REST API: Spotify link ----
     @app.route('/api/spotify/link', methods=['POST'])
     def spotify_link():
@@ -355,6 +368,36 @@ def _apply_config(m, data):
         'useTimeParameters': bool,
         'removeParenthesis': bool,
         'timerDisplay': str,
+        # New text feature settings
+        'textStyle': str,
+        'flipText': bool,
+        'mirrorText': bool,
+        'zalgoEnabled': bool,
+        'zalgoIntensity': int,
+        'kaomojiCategory': str,
+        'textAccentFrames': str,
+        'eightBallDisplay': str,
+        'eightBallInterval': int,
+        'diceDisplay': str,
+        'diceSides': int,
+        'diceCount': int,
+        'diceInterval': int,
+        'fortuneDisplay': str,
+        'fortuneFile': str,
+        'fortuneInterval': int,
+        'typewriterSpeed': int,
+        'cyclerMessages': str,
+        'cyclerInterval': int,
+        'reactionDisplay': str,
+        'reactionLabel': str,
+        'borderStyle': str,
+        'marqueeWidth': int,
+        'marqueeSpeed': int,
+        'textAlignment': str,
+        'textAlignWidth': int,
+        'smartTruncateMax': int,
+        'animateFrames': str,
+        'animateSpeed': int,
     }
     for key, converter in type_map.items():
         if key in data:
@@ -433,6 +476,36 @@ def _reset_config(m):
     m.removeParenthesis = False
     m.timerDisplay = '{hours}:{minutes}:{seconds}'
     m.timerEndStamp = int(datetime.now().timestamp() * 1000)
+    # New text feature defaults
+    m.textStyle = 'none'
+    m.flipText = False
+    m.mirrorText = False
+    m.zalgoEnabled = False
+    m.zalgoIntensity = 2
+    m.kaomojiCategory = 'random'
+    m.textAccentFrames = '✧,✦,★,☆,✶,✷'
+    m.eightBallDisplay = '🎱 {response}'
+    m.eightBallInterval = 30
+    m.diceDisplay = '🎲 {result}'
+    m.diceSides = 6
+    m.diceCount = 1
+    m.diceInterval = 30
+    m.fortuneDisplay = '🥠 {fortune}'
+    m.fortuneFile = ''
+    m.fortuneInterval = 60
+    m.typewriterSpeed = 2
+    m.cyclerMessages = ''
+    m.cyclerInterval = 5
+    m.reactionDisplay = '💜 {label}: {count}'
+    m.reactionLabel = 'Headpats'
+    m.borderStyle = 'double'
+    m.marqueeWidth = 20
+    m.marqueeSpeed = 1
+    m.textAlignment = 'left'
+    m.textAlignWidth = 30
+    m.smartTruncateMax = 144
+    m.animateFrames = '[ Loading . ],[ Loading .. ],[ Loading ... ]'
+    m.animateSpeed = 1
 
 
 def _save_config(m):
@@ -459,6 +532,16 @@ def _save_config(m):
             m.spotify_client_id, m.useTimeParameters, m.removeParenthesis,
             m.timerDisplay, m.timerEndStamp, m.animateVerticalDivider,
             m.verticalDividerFrames,
+            # New text feature config
+            m.textStyle, m.flipText, m.mirrorText, m.zalgoEnabled,
+            m.zalgoIntensity, m.kaomojiCategory, m.textAccentFrames,
+            m.eightBallDisplay, m.eightBallInterval, m.diceDisplay,
+            m.diceSides, m.diceCount, m.diceInterval, m.fortuneDisplay,
+            m.fortuneFile, m.fortuneInterval, m.typewriterSpeed,
+            m.cyclerMessages, m.cyclerInterval, m.reactionDisplay,
+            m.reactionLabel, m.borderStyle, m.marqueeWidth, m.marqueeSpeed,
+            m.textAlignment, m.textAlignWidth, m.smartTruncateMax,
+            m.animateFrames, m.animateSpeed,
         ]
         with open('please-do-not-delete.txt', 'w', encoding='utf-8') as f:
             f.write(str(config_list))

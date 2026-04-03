@@ -6,7 +6,7 @@ from datetime import datetime
 
 @dataclass
 class AppConfig:
-    version: str = "1.5.74"
+    version: str = "1.5.75"
     message_delay: float = 1.5
     messageString: str = ""
     FileToRead: str = ""
@@ -52,6 +52,38 @@ class AppConfig:
     mutedDisplay: str = "Muted 🔇"
     unmutedDisplay: str = "🔊"
     darkMode: bool = True
+    # Text styling plugins
+    textStyle: str = "none"
+    flipText: bool = False
+    mirrorText: bool = False
+    zalgoEnabled: bool = False
+    zalgoIntensity: int = 2
+    kaomojiCategory: str = "random"
+    textAccentFrames: str = "✧,✦,★,☆,✶,✷"
+    # Interactive plugins
+    eightBallDisplay: str = "🎱 {response}"
+    eightBallInterval: int = 30
+    diceDisplay: str = "🎲 {result}"
+    diceSides: int = 6
+    diceCount: int = 1
+    diceInterval: int = 30
+    fortuneDisplay: str = "🥠 {fortune}"
+    fortuneFile: str = ""
+    fortuneInterval: int = 60
+    typewriterSpeed: int = 2
+    cyclerMessages: str = ""
+    cyclerInterval: int = 5
+    reactionDisplay: str = "💜 {label}: {count}"
+    reactionLabel: str = "Headpats"
+    # Text formatting plugins
+    borderStyle: str = "double"
+    marqueeWidth: int = 20
+    marqueeSpeed: int = 1
+    textAlignment: str = "left"
+    textAlignWidth: int = 30
+    smartTruncateMax: int = 144
+    animateFrames: str = "[ Loading . ],[ Loading .. ],[ Loading ... ]"
+    animateSpeed: int = 1
 
 
 @dataclass

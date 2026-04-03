@@ -43,7 +43,12 @@ document.querySelectorAll('.sub-tab-btn').forEach(btn => {
 });
 
 // ---- Slider value display ----
-['msgDelay', 'songChangeTicks', 'blinkSpeed'].forEach(id => {
+[
+    'msgDelay', 'songChangeTicks', 'blinkSpeed',
+    'zalgoIntensity', 'eightBallInterval', 'diceCount', 'diceInterval',
+    'fortuneInterval', 'typewriterSpeed', 'cyclerInterval',
+    'marqueeWidth', 'marqueeSpeed', 'textAlignWidth', 'smartTruncateMax', 'animateSpeed',
+].forEach(id => {
     const el = document.getElementById(id);
     const valEl = document.getElementById(id + '-val');
     if (el && valEl) {
@@ -74,6 +79,9 @@ function populateForm(data) {
         'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort',
         'oscForewordAddress', 'oscForewordPort',
         'keybind_run', 'keybind_afk', 'timerDisplay',
+        // New text features
+        'textAccentFrames', 'eightBallDisplay', 'diceDisplay',
+        'fortuneDisplay', 'fortuneFile', 'reactionDisplay', 'reactionLabel',
     ];
     textFields.forEach(id => {
         const el = document.getElementById(id);
@@ -88,6 +96,19 @@ function populateForm(data) {
         document.getElementById('layoutStorage').value = data.layoutString;
         renderLayoutEditor(data.layoutString);
     }
+    // New textarea fields
+    const textareaFields = ['cyclerMessages', 'animateFrames'];
+    textareaFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.value = data[id];
+    });
+
+    // Select/dropdown fields
+    const selectFields = ['textStyle', 'kaomojiCategory', 'textAlignment', 'borderStyle', 'diceSides'];
+    selectFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.value = String(data[id]);
+    });
 
     // Checkboxes
     const checkboxes = [
@@ -99,6 +120,8 @@ function populateForm(data) {
         'minimizeOnStart', 'updatePrompt', 'darkMode', 'showSongInfo',
         'useAfkKeybind', 'oscListen', 'oscForeword', 'logOutput',
         'useTimeParameters',
+        // New text features
+        'flipText', 'mirrorText', 'zalgoEnabled',
     ];
     checkboxes.forEach(id => {
         const el = document.getElementById(id);
@@ -122,6 +145,19 @@ function populateForm(data) {
         'msgDelay': 'message_delay',
         'songChangeTicks': 'songChangeTicks',
         'blinkSpeed': 'blinkSpeed',
+        // New text features
+        'zalgoIntensity': 'zalgoIntensity',
+        'eightBallInterval': 'eightBallInterval',
+        'diceCount': 'diceCount',
+        'diceInterval': 'diceInterval',
+        'fortuneInterval': 'fortuneInterval',
+        'typewriterSpeed': 'typewriterSpeed',
+        'cyclerInterval': 'cyclerInterval',
+        'marqueeWidth': 'marqueeWidth',
+        'marqueeSpeed': 'marqueeSpeed',
+        'textAlignWidth': 'textAlignWidth',
+        'smartTruncateMax': 'smartTruncateMax',
+        'animateSpeed': 'animateSpeed',
     };
     Object.entries(sliders).forEach(([elId, key]) => {
         const el = document.getElementById(elId);
@@ -162,6 +198,9 @@ function collectFormData() {
         'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort',
         'oscForewordAddress', 'oscForewordPort',
         'keybind_run', 'keybind_afk', 'timerDisplay',
+        // New text features
+        'textAccentFrames', 'eightBallDisplay', 'diceDisplay',
+        'fortuneDisplay', 'fortuneFile', 'reactionDisplay', 'reactionLabel',
     ];
     textFields.forEach(id => {
         const el = document.getElementById(id);
@@ -171,6 +210,22 @@ function collectFormData() {
     // Textareas
     data.messageString = document.getElementById('messageInput').value;
     data.layoutString = document.getElementById('layoutStorage').value;
+    // New textarea fields
+    const textareaCollect = ['cyclerMessages', 'animateFrames'];
+    textareaCollect.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+    });
+
+    // Select/dropdown fields
+    const selectCollect = ['textStyle', 'kaomojiCategory', 'textAlignment', 'borderStyle'];
+    selectCollect.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+    });
+    // diceSides as int
+    const diceSidesEl = document.getElementById('diceSides');
+    if (diceSidesEl) data.diceSides = parseInt(diceSidesEl.value);
 
     // Checkboxes
     const checkboxes = [
@@ -182,6 +237,8 @@ function collectFormData() {
         'minimizeOnStart', 'updatePrompt', 'darkMode', 'showSongInfo',
         'useAfkKeybind', 'oscListen', 'oscForeword', 'logOutput',
         'useTimeParameters',
+        // New text features
+        'flipText', 'mirrorText', 'zalgoEnabled',
     ];
     checkboxes.forEach(id => {
         const el = document.getElementById(id);
@@ -198,6 +255,19 @@ function collectFormData() {
     data.message_delay = parseFloat(document.getElementById('msgDelay').value);
     data.songChangeTicks = parseFloat(document.getElementById('songChangeTicks').value);
     data.blinkSpeed = parseFloat(document.getElementById('blinkSpeed').value);
+    // New text feature sliders
+    data.zalgoIntensity = parseInt(document.getElementById('zalgoIntensity').value);
+    data.eightBallInterval = parseInt(document.getElementById('eightBallInterval').value);
+    data.diceCount = parseInt(document.getElementById('diceCount').value);
+    data.diceInterval = parseInt(document.getElementById('diceInterval').value);
+    data.fortuneInterval = parseInt(document.getElementById('fortuneInterval').value);
+    data.typewriterSpeed = parseInt(document.getElementById('typewriterSpeed').value);
+    data.cyclerInterval = parseInt(document.getElementById('cyclerInterval').value);
+    data.marqueeWidth = parseInt(document.getElementById('marqueeWidth').value);
+    data.marqueeSpeed = parseInt(document.getElementById('marqueeSpeed').value);
+    data.textAlignWidth = parseInt(document.getElementById('textAlignWidth').value);
+    data.smartTruncateMax = parseInt(document.getElementById('smartTruncateMax').value);
+    data.animateSpeed = parseInt(document.getElementById('animateSpeed').value);
 
     return data;
 }
@@ -404,6 +474,28 @@ async function resetTimer() {
         await fetch('/api/timer/reset', { method: 'POST' });
     } catch (e) {
         console.error('Timer reset failed:', e);
+    }
+}
+
+// ---- Reaction Counter ----
+async function incrementReaction() {
+    try {
+        const resp = await fetch('/api/reaction/increment', { method: 'POST' });
+        const data = await resp.json();
+        const el = document.getElementById('reactionCount');
+        if (el) el.textContent = data.count;
+    } catch (e) {
+        console.error('Reaction increment failed:', e);
+    }
+}
+
+async function resetReaction() {
+    try {
+        await fetch('/api/reaction/reset', { method: 'POST' });
+        const el = document.getElementById('reactionCount');
+        if (el) el.textContent = '0';
+    } catch (e) {
+        console.error('Reaction reset failed:', e);
     }
 }
 
