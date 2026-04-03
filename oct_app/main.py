@@ -169,6 +169,7 @@ isBooped= False
 isPat = False
 
 vrcPID = None
+playTimeDat = None
 
 # vrcPID is always None at startup; playtime is calculated in vrcRunningCheck
 
