@@ -1016,9 +1016,11 @@ def sendMsg(a):
 
           def checkData(msg, data):
             lf = "\v"
-            if data == 1 or data == 3:
+            if data & 4:
+              msg = currentDivider + " " + msg
+            if data & 1:
               msg = msg + " " + currentDivider
-            if data == 2 or data == 3:
+            if data & 2:
               msg = msg + lf
             return msg
 
@@ -1140,6 +1142,10 @@ def sendMsg(a):
             msgOutput = msgOutput[:-2]
           if "\v" in msgOutput[-2:]:
             msgOutput = msgOutput[:-1]
+          if msgOutput.startswith(currentDivider + " "):
+            msgOutput = msgOutput[len(currentDivider) + 1:]
+          msgOutput = msgOutput.replace("\v" + currentDivider + " ", "\v")
+          msgOutput = msgOutput.replace(currentDivider + " " + currentDivider, currentDivider)
           if not hideOutside:
             msgOutput = topBar + " " + msgOutput + " " + bottomBar
           msgOutput = msgOutput.replace("\\n", "\v").replace("\\v", "\v")

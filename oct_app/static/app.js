@@ -367,11 +367,11 @@ function moveLayoutElement(index, direction) {
     });
 }
 
-function toggleLayoutOption(index, divider, newLine) {
+function toggleLayoutOption(index, dividerAfter, newLine, dividerBefore) {
     let value = 0;
-    if (divider && newLine) value = 3;
-    else if (divider) value = 1;
-    else if (newLine) value = 2;
+    if (dividerAfter) value |= 1;
+    if (newLine) value |= 2;
+    if (dividerBefore) value |= 4;
 
     fetch('/api/layout/toggle', {
         method: 'POST',
@@ -409,8 +409,9 @@ function getItemOptions(item) {
     const match = item.match(/\((\d)\)/);
     const val = match ? parseInt(match[1]) : 0;
     return {
-        divider: val === 1 || val === 3,
-        newLine: val === 2 || val === 3,
+        dividerAfter: !!(val & 1),
+        newLine: !!(val & 2),
+        dividerBefore: !!(val & 4),
     };
 }
 
@@ -428,9 +429,19 @@ function renderLayoutEditor(layoutStr) {
             <button onclick="moveLayoutElement(${i}, 'up')" ${i === 0 ? 'disabled' : ''} title="Move up">\u2B06</button>
             <button onclick="moveLayoutElement(${i}, 'down')" ${i === items.length - 1 ? 'disabled' : ''} title="Move down">\u2B07</button>
             <span class="item-name">${getDisplayName(item)}</span>
-            <label><input type="checkbox" ${opts.divider ? 'checked' : ''} onchange="toggleLayoutOption(${i}, this.checked, this.parentElement.nextElementSibling.querySelector('input').checked)"> \u250B</label>
-            <label><input type="checkbox" ${opts.newLine ? 'checked' : ''} onchange="toggleLayoutOption(${i}, this.parentElement.previousElementSibling.querySelector('input').checked, this.checked)"> \u21A5</label>
+            <label title="Divider before"><input type="checkbox" data-opt="before" ${opts.dividerBefore ? 'checked' : ''}> \u250B\u2192</label>
+            <label title="Divider after"><input type="checkbox" data-opt="after" ${opts.dividerAfter ? 'checked' : ''}> \u2192\u250B</label>
+            <label title="New line"><input type="checkbox" data-opt="newline" ${opts.newLine ? 'checked' : ''}> \u21A5</label>
         `;
+        div.querySelectorAll('input[type=checkbox]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const row = cb.closest('.layout-item');
+                const after = row.querySelector('[data-opt="after"]').checked;
+                const newLine = row.querySelector('[data-opt="newline"]').checked;
+                const before = row.querySelector('[data-opt="before"]').checked;
+                toggleLayoutOption(i, after, newLine, before);
+            });
+        });
         container.appendChild(div);
     });
 

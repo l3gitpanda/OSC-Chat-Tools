@@ -107,7 +107,7 @@ def create_app():
     def layout_toggle():
         data = request.get_json(force=True)
         index = data.get('index', 0)
-        value = data.get('value', 0)  # 0, 1, 2, or 3
+        value = data.get('value', 0)  # 0-7 (bit0=dividerAfter, bit1=newLine, bit2=dividerBefore)
         parsed = _parse_layout(m.layoutString)
         if 0 <= index < len(parsed):
             item = parsed[index]
