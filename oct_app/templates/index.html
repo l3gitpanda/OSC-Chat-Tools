@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSC Chat Tools</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Left Sidebar Tabs -->
+        <nav id="sidebar">
+            <button class="tab-btn active" data-tab="layout">&#x1F9E9; Layout</button>
+            <button class="tab-btn" data-tab="behavior">&#x1F916; Behavior</button>
+            <button class="tab-btn" data-tab="preview">&#x1F4FA; Preview</button>
+            <button class="tab-btn" data-tab="options">&#x1F4BB; Options</button>
+            <button class="tab-btn" data-tab="osc">&#x1F4F2; OSC</button>
+            <button class="tab-btn" data-tab="output">&#x1F4BE; Output</button>
+            <button class="tab-btn" data-tab="help">&#x2753; Help</button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="content">
+            <!-- ==================== LAYOUT TAB ==================== -->
+            <div class="tab-panel active" id="tab-layout">
+                <div class="panel-header">
+                    <h2>Configure chatbox layout</h2>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="scrollText"> Text file read (disables everything else)
+                    </label>
+                </div>
+                <div class="layout-columns">
+                    <div class="layout-add-col">
+                        <h3>Add Elements</h3>
+                        <p class="hint">Every element is customizable from the Behavior Tab</p>
+                        <p class="hint"><span class="cyan">*</span> = Requires OSC Listening</p>
+                        <div class="element-list">
+                            <div class="element-row"><span class="el-icon">&#x1F4AC;</span><span class="el-name">Text</span><span class="el-desc">A configurable text object</span><button class="btn" onclick="addLayoutElement('text(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F552;</span><span class="el-name">Time</span><span class="el-desc">Display your current time</span><button class="btn" onclick="addLayoutElement('time(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F3B5;</span><span class="el-name">Song</span><span class="el-desc">Customizable song display</span><button class="btn" onclick="addLayoutElement('song(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x23F1;</span><span class="el-name">CPU</span><span class="el-desc">Display CPU Utilization %</span><button class="btn" onclick="addLayoutElement('cpu(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F6A6;</span><span class="el-name">RAM</span><span class="el-desc">Display RAM Usage %</span><button class="btn" onclick="addLayoutElement('ram(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x231B;</span><span class="el-name">GPU</span><span class="el-desc">Display GPU Utilization %</span><button class="btn" onclick="addLayoutElement('gpu(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F493;</span><span class="el-name">HR</span><span class="el-desc">Display Heart Rate</span><button class="btn" onclick="addLayoutElement('hr(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x1F507;</span><span class="el-name">Mute</span> <span class="cyan">*</span><span class="el-desc">Display Mic Mute Status</span><button class="btn" onclick="addLayoutElement('mute(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x231A;</span><span class="el-name">Play Time</span><span class="el-desc">Show Play Time</span><button class="btn" onclick="addLayoutElement('playtime(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2328;</span><span class="el-name">STT</span><span class="el-desc">Speech recognition</span><button class="btn" disabled>Coming Soon</button></div>
+                            <div class="element-row"><span class="el-icon">&#x2635;</span><span class="el-name">Divider</span><span class="el-desc">Horizontal Divider</span><button class="btn" onclick="addLayoutElement('div(0)')">Add to Layout</button></div>
+                            <div class="element-row"><span class="el-icon">&#x23F2;</span><span class="el-name">Timer</span><span class="el-desc">Countdown Timer</span><button class="btn" onclick="addLayoutElement('timer(0)')">Add to Layout</button></div>
+                        </div>
+                    </div>
+                    <div class="layout-arrange-col">
+                        <h3>Arrange Elements</h3>
+                        <p class="hint">&rarr; = New Line &ensp; &#x250B; = Vertical Divider</p>
+                        <div id="layout-editor"></div>
+                        <h3>Manual Edit <button class="btn-small" onclick="showManualHelp()">?</button></h3>
+                        <p class="hint">Wrap object in { }. Spaces are respected.</p>
+                        <textarea id="layoutStorage" rows="4" spellcheck="false"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== BEHAVIOR TAB ==================== -->
+            <div class="tab-panel" id="tab-behavior">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-subtab="beh-misc">&#x2754;Misc.</button>
+                    <button class="sub-tab-btn" data-subtab="beh-text">&#x1F4AC;Text</button>
+                    <button class="sub-tab-btn" data-subtab="beh-time">&#x1F552;Time</button>
+                    <button class="sub-tab-btn" data-subtab="beh-song">&#x1F3B5;Song</button>
+                    <button class="sub-tab-btn" data-subtab="beh-cpu">&#x23F1;CPU</button>
+                    <button class="sub-tab-btn" data-subtab="beh-ram">&#x1F6A6;RAM</button>
+                    <button class="sub-tab-btn" data-subtab="beh-gpu">&#x231B;GPU</button>
+                    <button class="sub-tab-btn" data-subtab="beh-hr">&#x1F493;HR</button>
+                    <button class="sub-tab-btn" data-subtab="beh-mute">&#x1F507;Mute</button>
+                    <button class="sub-tab-btn" data-subtab="beh-playtime">&#x231A;Play Time</button>
+                    <button class="sub-tab-btn" data-subtab="beh-stt">&#x2328;STT</button>
+                    <button class="sub-tab-btn" data-subtab="beh-divider">&#x2635;Divider</button>
+                    <button class="sub-tab-btn" data-subtab="beh-timer">&#x23F2;Timer</button>
+                </div>
+
+                <!-- Misc -->
+                <div class="sub-tab-panel active" id="beh-misc">
+                    <div class="form-section">
+                        <label>File to use for text file read functionality</label>
+                        <input type="text" id="FileToRead" placeholder="Path to file...">
+                    </div>
+                    <div class="form-section">
+                        <label>Delay between frame updates (seconds)</label>
+                        <p class="hint">If you get 'Timed out' messages, try increasing this</p>
+                        <input type="range" id="msgDelay" min="1.5" max="10" step="0.1" value="1.5">
+                        <span id="msgDelay-val">1.5</span>
+                    </div>
+                    <div class="form-section">
+                        <label>Advanced Sending Options</label>
+                        <label class="checkbox-label"><input type="checkbox" id="sendBlank" checked> Clear chatbox on toggle/close</label>
+                        <label class="checkbox-label"><input type="checkbox" id="suppressDuplicates"> Skip sending duplicate messages</label>
+                        <label class="checkbox-label"><input type="checkbox" id="sendASAP"> Send next message ASAP on data update</label>
+                    </div>
+                </div>
+
+                <!-- Text -->
+                <div class="sub-tab-panel" id="beh-text">
+                    <div class="form-section">
+                        <label>Text to display. One frame per line. Use * for blank frame. \n and \v are respected.</label>
+                        <textarea id="messageInput" rows="10" spellcheck="false">OSC Chat Tools
+By Lioncat6</textarea>
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <div class="sub-tab-panel" id="beh-time">
+                    <div class="form-section">
+                        <label>Template for Time display</label>
+                        <p class="hint">Variables: {hour}, {minute}, {time_zone}, {hour24}</p>
+                        <label>AM: <input type="text" id="timeDisplayAM" value="{hour}:{minute} AM"></label>
+                        <label>PM: <input type="text" id="timeDisplayPM" value="{hour}:{minute} PM"></label>
+                        <label class="checkbox-label"><input type="checkbox" id="useTimeParameters"> Send Time parameters to avatar (vrcosc)</label>
+                    </div>
+                </div>
+
+                <!-- Song -->
+                <div class="sub-tab-panel" id="beh-song">
+                    <div class="form-section">
+                        <label>Audio info source:</label>
+                        <label class="checkbox-label"><input type="radio" name="audioSource" id="useMediaManager" checked> Windows Now Playing</label>
+                        <label class="checkbox-label"><input type="radio" name="audioSource" id="useSpotifyApi"> Spotify API</label>
+                    </div>
+                    <div class="form-section">
+                        <label>Windows Now Playing template</label>
+                        <p class="hint">Variables: {artist}, {title}, {album_title}, {album_artist}</p>
+                        <input type="text" id="songDisplay">
+                        <label class="checkbox-label"><input type="checkbox" id="appleMusicOnly"> Only read Apple Music sessions</label>
+                    </div>
+                    <div class="form-section">
+                        <label>Spotify template</label>
+                        <p class="hint">Variables: {artist}, {title}, {album_title}, {album_artist}, {song_progress}, {song_length}, {volume}, {song_id}</p>
+                        <input type="text" id="spotifySongDisplay">
+                        <label>Spotify Client ID <a href="javascript:void(0)" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki/Spotify-Client-ID')">? If linking fails, click here!</a></label>
+                        <input type="text" id="spotify_client_id">
+                        <div class="spotify-link-row">
+                            <button class="btn spotify-btn" id="linkSpotifyBtn" onclick="linkSpotify()">Link Spotify &#x1F517;</button>
+                            <span id="spotifyLinkStatus" class="status-orange">Unlinked</span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <label>Music Settings:</label>
+                        <label class="checkbox-label"><input type="checkbox" id="showPaused" checked> Show "&#x23F8;" when paused</label>
+                        <label class="checkbox-label"><input type="checkbox" id="hideSong"> Hide song when paused</label>
+                        <label class="checkbox-label"><input type="checkbox" id="removeParenthesis"> Remove text in parenthesis (shortens names)</label>
+                        <hr>
+                        <label class="checkbox-label"><input type="checkbox" id="showOnChange"> Only show on song change</label>
+                        <label>Frames before song disappears:</label>
+                        <input type="range" id="songChangeTicks" min="1" max="5" step="1" value="2">
+                        <span id="songChangeTicks-val">2</span>
+                    </div>
+                </div>
+
+                <!-- CPU -->
+                <div class="sub-tab-panel" id="beh-cpu">
+                    <div class="form-section">
+                        <label>Template for CPU display. Variables: {cpu_percent}</label>
+                        <input type="text" id="cpuDisplay">
+                    </div>
+                </div>
+
+                <!-- RAM -->
+                <div class="sub-tab-panel" id="beh-ram">
+                    <div class="form-section">
+                        <label>Template for RAM display. Variables: {ram_percent}, {ram_available}, {ram_total}, {ram_used}</label>
+                        <input type="text" id="ramDisplay">
+                    </div>
+                </div>
+
+                <!-- GPU -->
+                <div class="sub-tab-panel" id="beh-gpu">
+                    <div class="form-section">
+                        <label>Template for GPU display. Variables: {gpu_percent}</label>
+                        <input type="text" id="gpuDisplay">
+                    </div>
+                </div>
+
+                <!-- HR -->
+                <div class="sub-tab-panel" id="beh-hr">
+                    <div class="form-section">
+                        <label>Template for Heart Rate display. Variables: {hr}</label>
+                        <input type="text" id="hrDisplay">
+                    </div>
+                    <div class="form-section">
+                        <label>Heart Rate source:</label>
+                        <label class="checkbox-label"><input type="radio" name="hrSource" id="usePulsoid" checked> Pulsoid</label>
+                        <label class="checkbox-label"><input type="radio" name="hrSource" id="useHypeRate"> HypeRate</label>
+                        <label class="checkbox-label"><input type="checkbox" id="avatarHR"> Pass through HR parameters when not running</label>
+                        <label class="checkbox-label"><input type="checkbox" id="toggleBeat" checked> Heart Rate Beat</label>
+                        <label class="checkbox-label"><input type="checkbox" id="blinkOverride"> Override Beat</label>
+                        <label>Blink Speed (if overridden):</label>
+                        <input type="range" id="blinkSpeed" min="0" max="5" step="0.01" value="0.5">
+                        <span id="blinkSpeed-val">0.5</span>
+                    </div>
+                    <div class="form-section">
+                        <label>Pulsoid Token: <a href="javascript:void(0)" onclick="window.open('https://pulsoid.net/oauth2/authorize?response_type=token&client_id=8070496f-f886-4030-8340-96d1d68b25cb&redirect_uri=&scope=data:heart_rate:read&state=&response_mode=web_page')">Get Token &#x1F493;</a></label>
+                        <input type="text" id="pulsoidToken">
+                    </div>
+                    <div class="form-section">
+                        <label>HypeRate API Key: <a href="javascript:void(0)" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki/HypeRate-Keys')">Get Key &#x1F49E;</a></label>
+                        <input type="text" id="hypeRateKey">
+                        <label>HypeRate Session ID:</label>
+                        <input type="text" id="hypeRateSessionId">
+                    </div>
+                </div>
+
+                <!-- Mute -->
+                <div class="sub-tab-panel" id="beh-mute">
+                    <div class="form-section">
+                        <label>Template for Mute Toggle display</label>
+                        <label>Muted: <input type="text" id="mutedDisplay"></label>
+                        <label>Unmuted: <input type="text" id="unmutedDisplay"></label>
+                    </div>
+                </div>
+
+                <!-- Play Time -->
+                <div class="sub-tab-panel" id="beh-playtime">
+                    <div class="form-section">
+                        <label>Template for Play Time display. Variables: {hours}, {remainder_minutes}, {minutes}</label>
+                        <input type="text" id="playTimeDisplay">
+                    </div>
+                </div>
+
+                <!-- STT -->
+                <div class="sub-tab-panel" id="beh-stt">
+                    <p>Coming Soon</p>
+                </div>
+
+                <!-- Divider -->
+                <div class="sub-tab-panel" id="beh-divider">
+                    <div class="form-section">
+                        <label>Top Divider:</label>
+                        <input type="text" id="topBar">
+                        <label>Middle Divider:</label>
+                        <input type="text" id="middleBar">
+                        <label>Bottom Divider:</label>
+                        <input type="text" id="bottomBar">
+                        <label>Vertical Divider:</label>
+                        <input type="text" id="verticalDivider">
+                        <label class="checkbox-label"><input type="checkbox" id="animateVerticalDivider"> Animate Vertical Divider</label>
+                        <label>Animation Frames (comma-separated):</label>
+                        <input type="text" id="verticalDividerFrames">
+                        <label class="checkbox-label"><input type="checkbox" id="hideOutside" checked> Remove outside dividers</label>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div class="sub-tab-panel" id="beh-timer">
+                    <div class="form-section">
+                        <label>Template for Timer display. Variables: {hours}, {minutes}, {seconds}</label>
+                        <input type="text" id="timerDisplay">
+                        <p>Current Remaining: <span id="currentTimer">00:00:00</span></p>
+                        <div class="timer-controls">
+                            <label>Hours: <input type="number" id="addHours" min="0" style="width:60px"> <button class="btn-small" onclick="addTimer('hours')">Add</button></label>
+                            <label>Minutes: <input type="number" id="addMinutes" min="0" style="width:60px"> <button class="btn-small" onclick="addTimer('minutes')">Add</button></label>
+                            <label>Seconds: <input type="number" id="addSeconds" min="0" style="width:60px"> <button class="btn-small" onclick="addTimer('seconds')">Add</button></label>
+                            <button class="btn" onclick="resetTimer()">Reset Timer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PREVIEW TAB ==================== -->
+            <div class="tab-panel" id="tab-preview">
+                <div class="panel-header">
+                    <h2>Preview (Not Perfect)</h2>
+                    <span id="sentCountdown"></span>
+                </div>
+                <div id="preview-box">
+                    <pre id="messagePreview"></pre>
+                </div>
+            </div>
+
+            <!-- ==================== OPTIONS TAB ==================== -->
+            <div class="tab-panel" id="tab-options">
+                <h2>Configure Program</h2>
+                <div class="form-section">
+                    <label class="checkbox-label"><input type="checkbox" id="minimizeOnStart"> Minimize on startup</label>
+                    <label class="checkbox-label"><input type="checkbox" id="updatePrompt" checked> Show update prompt</label>
+                    <label class="checkbox-label"><input type="checkbox" id="darkMode" checked> Dark Mode</label>
+                    <label class="checkbox-label"><input type="checkbox" id="showSongInfo" checked> Show song info on bottom ribbon</label>
+                </div>
+                <h2>Keybindings</h2>
+                <p class="hint">You must press Apply for new keybinds to take effect!</p>
+                <div class="form-section">
+                    <label>Toggle Run: <span class="keybind-display" id="keybind_run_display">`</span> <input type="text" id="keybind_run" value="`" style="width:100px"></label>
+                    <label>Toggle AFK: <span class="keybind-display" id="keybind_afk_display">end</span> <input type="text" id="keybind_afk" value="end" style="width:100px"></label>
+                    <label class="checkbox-label"><input type="checkbox" id="useAfkKeybind"> Use AFK keybind (otherwise uses OSC)</label>
+                </div>
+            </div>
+
+            <!-- ==================== OSC TAB ==================== -->
+            <div class="tab-panel" id="tab-osc">
+                <h2>OSC Options - Experimental</h2>
+                <p class="hint">(Turning on debug logging is recommended)</p>
+                <div class="form-section">
+                    <h3>OSC Listen Options</h3>
+                    <label class="checkbox-label"><input type="checkbox" id="oscListen"> Use OSC Listen</label>
+                    <label>Address: <input type="text" id="oscListenAddress" value="127.0.0.1"></label>
+                    <label>Port: <input type="text" id="oscListenPort" value="9001"></label>
+                </div>
+                <div class="form-section">
+                    <h3>OSC Send Options</h3>
+                    <label>Address: <input type="text" id="oscSendAddress" value="127.0.0.1"></label>
+                    <label>Port: <input type="text" id="oscSendPort" value="9000"></label>
+                </div>
+                <div class="form-section">
+                    <h3>OSC Forwarding Options</h3>
+                    <p class="hint">Repeats all listened data to another address for other programs</p>
+                    <label class="checkbox-label"><input type="checkbox" id="oscForeword"> Use OSC Forwarding</label>
+                    <label>Address: <input type="text" id="oscForewordAddress" value="127.0.0.1"></label>
+                    <label>Port: <input type="text" id="oscForewordPort" value="9002"></label>
+                </div>
+                <div class="form-section">
+                    <h3>Avatar Debugging</h3>
+                    <label>Path: <input type="text" id="debugPath" placeholder="/avatar/parameters/..."></label>
+                    <label>Value: <input type="text" id="debugValue"></label>
+                    <label>Type:
+                        <select id="debugType">
+                            <option value="int">int</option>
+                            <option value="float">float</option>
+                            <option value="bool">bool</option>
+                            <option value="str">str</option>
+                        </select>
+                    </label>
+                    <button class="btn" onclick="sendDebug()">Send</button>
+                </div>
+            </div>
+
+            <!-- ==================== OUTPUT TAB ==================== -->
+            <div class="tab-panel" id="tab-output">
+                <div class="panel-header">
+                    <h2>Program Output</h2>
+                    <label class="checkbox-label"><input type="checkbox" id="logOutput"> Log to file (OCT_debug_log.txt)</label>
+                </div>
+                <pre id="output-log"></pre>
+            </div>
+
+            <!-- ==================== HELP TAB ==================== -->
+            <div class="tab-panel" id="tab-help">
+                <h2>Help</h2>
+                <div class="form-section">
+                    <label>FAQ</label>
+                    <button class="btn" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki/FAQ')">Open Wiki</button>
+                    <label>Quick Start Guide</label>
+                    <button class="btn" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki/OCT-Quick-Start-Guide')">Open Wiki</button>
+                    <label>Auto-Starting with VRChat</label>
+                    <button class="btn" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki/Autostarting-OCT-with-VRChat-using-VRCX')">Open Wiki</button>
+                    <label>General Wiki</label>
+                    <button class="btn" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/wiki')">Open Wiki</button>
+                    <label>Report an Issue</label>
+                    <button class="btn" onclick="window.open('https://github.com/Lioncat6/OSC-Chat-Tools/issues')">Open Github</button>
+                    <label>Discord</label>
+                    <button class="btn" onclick="window.open('https://discord.com/invite/qeBTyA8uqX')">Open Discord</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bottom Bar -->
+    <footer id="bottom-bar">
+        <div class="bottom-left">
+            <button class="btn" id="applyBtn" onclick="applyConfig()">Apply</button>
+            <button class="btn" id="resetBtn" onclick="resetConfig()">Reset</button>
+            <span id="versionText"></span>
+            <label class="toggle-label run-toggle"><input type="checkbox" id="runToggle" checked onchange="toggleRun()"> Run?</label>
+            <label class="toggle-label afk-toggle"><input type="checkbox" id="afkToggle" onchange="toggleAfk()"> AFK</label>
+        </div>
+        <div class="bottom-right" id="songRibbon">
+            <span id="ribbonPlayStatus"></span>
+            <span id="ribbonSongName"></span>
+            <span id="ribbonDuration"></span>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

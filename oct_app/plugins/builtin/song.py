@@ -19,10 +19,9 @@ def render_song(context, _text, data=0):
             album_title = ""
             album_artist = ""
             media_playing = False
-            if "TARGET_PROGRAM" not in str(e) and context.get("window_access") is not None:
+            if "TARGET_PROGRAM" not in str(e):
                 try:
                     context["output_log"](f"mediaManagerError {e}")
-                    context["window_access"].write_event_value("mediaManagerError", e)
                 except Exception:
                     pass
 
@@ -97,14 +96,10 @@ def render_song(context, _text, data=0):
     try:
         if context["use_spotify_api"]:
             context["spotify_song_url"] = play_state.get("item").get("external_urls").get("spotify")
-            context["window_access"].write_event_value(
-                "updateSpotifySongName", [title, media_playing, song_progress, song_length, artist]
-            )
         else:
             context["spotify_song_url"] = ""
-            context["window_access"].write_event_value(
-                "updateSpotifySongName", [title, media_playing, 0, 0, artist]
-            )
+        # Song info is now sent via SocketIO status_update from the web module
+        context["song_name"] = title + " \u1d47\u02b8 " + artist if title else ""
     except Exception:
         pass
 

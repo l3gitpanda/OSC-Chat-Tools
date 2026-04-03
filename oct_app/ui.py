@@ -1,10 +1,9 @@
-"""UI module wrappers for OCT."""
+"""UI module wrappers for OCT - now delegates to web UI."""
 
 
-def layoutPreviewBuilder(layout, window):
-    from . import main as legacy_main
-
-    return legacy_main.layoutPreviewBuilder(layout, window)
+def layoutPreviewBuilder(layout, window=None):
+    """Legacy stub - layout preview is now handled in the web UI JavaScript."""
+    pass
 
 
 def uiThread():
