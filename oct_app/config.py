@@ -6,7 +6,7 @@ from datetime import datetime
 
 @dataclass
 class AppConfig:
-    version: str = "1.5.73"
+    version: str = "1.5.74"
     message_delay: float = 1.5
     messageString: str = ""
     FileToRead: str = ""
@@ -42,6 +42,8 @@ class AppConfig:
     logOutput: bool = False
     layoutString: str = ""
     verticalDivider: str = "〣"
+    animateVerticalDivider: bool = False
+    verticalDividerFrames: str = "〣,〢,〡,〢"
     cpuDisplay: str = "ᴄᴘᴜ: {cpu_percent}%"
     ramDisplay: str = "ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})"
     gpuDisplay: str = "ɢᴘᴜ: {gpu_percent}%"

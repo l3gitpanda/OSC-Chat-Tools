@@ -85,6 +85,9 @@ oscForeword = False #in conf
 logOutput = False  #in conf
 layoutString = '' #in conf
 verticalDivider = "〣" #in conf
+animateVerticalDivider = False #in conf
+verticalDividerFrames = "〣,〢,〡,〢" #in conf
+dividerFrameIndex = 0
 cpuDisplay = 'ᴄᴘᴜ: {cpu_percent}%'#in conf
 ramDisplay = 'ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})'#in conf
 gpuDisplay = 'ɢᴘᴜ: {gpu_percent}%'#in conf
@@ -411,7 +414,8 @@ confDataDict = { #this dictionary will always exclude position 0 which is the co
   "1.5.70" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.71" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
   "1.5.72" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
-  "1.5.73" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp']
+  "1.5.73" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp'],
+  "1.5.74" : ['confVersion', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt', 'oscListenAddress', 'oscListenPort', 'oscSendAddress', 'oscSendPort', 'oscForewordAddress', 'oscForeword', 'oscListen', 'oscForeword', 'logOutput', 'layoutString', 'verticalDivider','cpuDisplay', 'ramDisplay', 'gpuDisplay', 'hrDisplay', 'playTimeDisplay', 'mutedDisplay', 'unmutedDisplay', 'darkMode', 'sendBlank', 'suppressDuplicates', 'sendASAP', 'useMediaManager', 'useSpotifyApi', 'appleMusicOnly', 'spotifySongDisplay', 'spotifyAccessToken', 'spotifyRefreshToken', 'usePulsoid', 'useHypeRate', 'hypeRateKey', 'hypeRateSessionId','timeDisplayPM', 'timeDisplayAM', 'showSongInfo', 'spotify_client_id', 'useTimeParameters', 'removeParenthesis', 'timerDisplay', 'timerEndStamp', 'animateVerticalDivider', 'verticalDividerFrames']
 }
 
 if os.path.isfile('please-do-not-delete.txt'):
@@ -673,6 +677,8 @@ def uiThread():
   global logOutput
   global layoutString
   global verticalDivider
+  global animateVerticalDivider
+  global verticalDividerFrames
   global layoutDisplayDict
   global cpuDisplay
   global ramDisplay
@@ -927,8 +933,11 @@ def uiThread():
                   [sg.Input(key='bottomBar', size=(50, 1))],
                   [sg.Text('Vertical Divider:')],
                   [sg.Input(key='verticalDivider', size=(50, 1))],
+                  [sg.Checkbox('Animate Vertical Divider', default=False, key='animateVerticalDivider')],
+                  [sg.Text('Animation Frames (comma-separated):')],
+                  [sg.Input(key='verticalDividerFrames', size=(50, 1))],
                   [sg.Checkbox('Remove outside dividers', default=True, key='hideOutside', enable_events= True)],
-                ], size=(379, 270))],
+                ], size=(379, 340))],
   ]
   timer_conf_layout = [
     [sg.Column([
@@ -1134,6 +1143,8 @@ def uiThread():
     window['logOutput'].update(value=False)
     window['layoutStorage'].update(value='')
     window['verticalDivider'].update(value='〣')
+    window['animateVerticalDivider'].update(value=False)
+    window['verticalDividerFrames'].update(value='〣,〢,〡,〢')
     window['cpuDisplay'].update(value='ᴄᴘᴜ: {cpu_percent}%')
     window['ramDisplay'].update(value='ʀᴀᴍ: {ram_percent}%  ({ram_used}/{ram_total})')
     window['gpuDisplay'].update(value='ɢᴘᴜ: {gpu_percent}%')
@@ -1249,6 +1260,8 @@ def uiThread():
         window['logOutput'].update(value=logOutput)
         window['layoutStorage'].update(value=layoutString)
         window['verticalDivider'].update(value=verticalDivider)
+        window['animateVerticalDivider'].update(value=animateVerticalDivider)
+        window['verticalDividerFrames'].update(value=verticalDividerFrames)
         window['cpuDisplay'].update(value=cpuDisplay)
         window['ramDisplay'].update(value=ramDisplay)
         window['gpuDisplay'].update(value=gpuDisplay)
@@ -1382,6 +1395,8 @@ def uiThread():
           logOutput = values['logOutput']
           layoutString = values['layoutStorage']
           verticalDivider = values['verticalDivider']
+          animateVerticalDivider = values['animateVerticalDivider']
+          verticalDividerFrames = values['verticalDividerFrames']
           cpuDisplay = values['cpuDisplay']
           ramDisplay = values['ramDisplay']
           gpuDisplay = values['gpuDisplay']
@@ -1410,7 +1425,7 @@ def uiThread():
           timerDisplay = values['timerDisplay']
           try:
             with open('please-do-not-delete.txt', 'w', encoding="utf-8") as f:
-              f.write(str([confVersion, message_delay, messageString, FileToRead, scrollText, hideSong, hideOutside, showPaused, songDisplay, showOnChange, songChangeTicks, minimizeOnStart, keybind_run, keybind_afk,topBar, middleBar, bottomBar, pulsoidToken, avatarHR, blinkOverride, blinkSpeed, useAfkKeybind, toggleBeat, updatePrompt, oscListenAddress, oscListenPort, oscSendAddress, oscSendPort, oscForewordAddress, oscForeword, oscListen, oscForeword, logOutput, layoutString, verticalDivider,cpuDisplay, ramDisplay, gpuDisplay, hrDisplay, playTimeDisplay, mutedDisplay, unmutedDisplay, darkMode, sendBlank, suppressDuplicates, sendASAP,useMediaManager, useSpotifyApi, appleMusicOnly, spotifySongDisplay, spotifyAccessToken, spotifyRefreshToken, usePulsoid, useHypeRate, hypeRateKey, hypeRateSessionId, timeDisplayPM, timeDisplayAM, showSongInfo, spotify_client_id, useTimeParameters, removeParenthesis, timerDisplay, timerEndStamp]))
+              f.write(str([confVersion, message_delay, messageString, FileToRead, scrollText, hideSong, hideOutside, showPaused, songDisplay, showOnChange, songChangeTicks, minimizeOnStart, keybind_run, keybind_afk,topBar, middleBar, bottomBar, pulsoidToken, avatarHR, blinkOverride, blinkSpeed, useAfkKeybind, toggleBeat, updatePrompt, oscListenAddress, oscListenPort, oscSendAddress, oscSendPort, oscForewordAddress, oscForeword, oscListen, oscForeword, logOutput, layoutString, verticalDivider,cpuDisplay, ramDisplay, gpuDisplay, hrDisplay, playTimeDisplay, mutedDisplay, unmutedDisplay, darkMode, sendBlank, suppressDuplicates, sendASAP,useMediaManager, useSpotifyApi, appleMusicOnly, spotifySongDisplay, spotifyAccessToken, spotifyRefreshToken, usePulsoid, useHypeRate, hypeRateKey, hypeRateSessionId, timeDisplayPM, timeDisplayAM, showSongInfo, spotify_client_id, useTimeParameters, removeParenthesis, timerDisplay, timerEndStamp, animateVerticalDivider, verticalDividerFrames]))
           except Exception as e:
             sg.popup('Error saving config to file:\n'+str(e))
           
@@ -2132,6 +2147,9 @@ def sendMsg(a):
     global toggleBeat
     global layoutString
     global verticalDivider
+    global animateVerticalDivider
+    global verticalDividerFrames
+    global dividerFrameIndex
     global cpuDisplay
     global ramDisplay
     global gpuDisplay
@@ -2162,6 +2180,9 @@ def sendMsg(a):
         
         def msgGen(a):
           global verticalDivider
+          global animateVerticalDivider
+          global verticalDividerFrames
+          global dividerFrameIndex
           global msgOutput
           global spotifySongUrl
           global songName
@@ -2169,17 +2190,27 @@ def sendMsg(a):
           global timerEndStamp
           global timerVar
 
+          if animateVerticalDivider:
+            frames = [f.strip() for f in verticalDividerFrames.split(',') if f.strip()]
+            if frames:
+              currentDivider = frames[dividerFrameIndex % len(frames)]
+              dividerFrameIndex += 1
+            else:
+              currentDivider = verticalDivider
+          else:
+            currentDivider = verticalDivider
+
           def checkData(msg, data):
             lf = "\v"
             if data == 1 or data == 3:
-              msg = msg + " " + verticalDivider
+              msg = msg + " " + currentDivider
             if data == 2 or data == 3:
               msg = msg + lf
             return msg
 
           plugin_context = {
             "check_data": checkData,
-            "vertical_divider": verticalDivider,
+            "vertical_divider": currentDivider,
             "middle_bar": middleBar,
             "muted_display": mutedDisplay,
             "unmuted_display": unmutedDisplay,
@@ -2241,8 +2272,8 @@ def sendMsg(a):
           tickCount = plugin_context["tick_count"]
           spotifySongUrl = plugin_context["spotify_song_url"]
 
-          if msgOutput[-len(verticalDivider+" "): ] == verticalDivider+" ":
-            msgOutput = msgOutput[:-len(verticalDivider+" ")-1]
+          if msgOutput[-len(currentDivider+" "): ] == currentDivider+" ":
+            msgOutput = msgOutput[:-len(currentDivider+" ")-1]
           if msgOutput[-len(middleBar+" "): ] == middleBar+" ":
             msgOutput = msgOutput[:-len(middleBar+" ")]
           if "\v " in msgOutput[-2:]:
