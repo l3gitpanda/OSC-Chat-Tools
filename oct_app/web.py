@@ -4,6 +4,7 @@ import os
 import time
 import ast
 import threading
+from collections import deque
 from threading import Thread
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
@@ -584,6 +585,7 @@ def start_update_thread(m):
     _update_thread_started = True
 
     def update_loop():
+        _prev_status = None
         while m.run:
             try:
                 timer_var = m.timerEndStamp - int(time.time() * 1000)
@@ -598,7 +600,7 @@ def start_update_thread(m):
                     'showSongInfo': m.showSongInfo,
                 }
 
-                socketio.emit('status_update', {
+                status = {
                     'playMsg': m.playMsg,
                     'afk': m.afk,
                     'msgOutput': m.msgOutput.replace('\v', '\n') if m.msgOutput else '',
@@ -610,7 +612,11 @@ def start_update_thread(m):
                     'hrConnected': getattr(m, 'hrConnected', False),
                     'song': song_info,
                     'layoutString': m.layoutString,
-                })
+                }
+
+                if status != _prev_status:
+                    socketio.emit('status_update', status)
+                    _prev_status = status
             except Exception:
                 pass
             time.sleep(0.5)
@@ -620,9 +626,9 @@ def start_update_thread(m):
 
 
 # ---- Log output hook ----
-_log_messages = []
-_log_lock = threading.Lock()
 MAX_LOG_LINES = 1000
+_log_messages = deque(maxlen=MAX_LOG_LINES)
+_log_lock = threading.Lock()
 
 
 def web_output_log(text):
@@ -632,8 +638,6 @@ def web_output_log(text):
     formatted = f"{timestamp} [{thread_name}] {text}"
     with _log_lock:
         _log_messages.append(formatted)
-        if len(_log_messages) > MAX_LOG_LINES:
-            _log_messages.pop(0)
     try:
         socketio.emit('log_append', {'line': formatted})
     except Exception:

@@ -418,15 +418,54 @@ def _get_media_loop():
                 _media_loop = asyncio.new_event_loop()
     return _media_loop
 
+# -- Cached media info (refreshed by background thread) --
+_media_cache = {
+    "info": {},
+    "playback_status": None,
+}
+_media_cache_lock = threading.Lock()
+_media_cache_started = False
+
+def _start_media_cache_thread():
+    """Start daemon thread that refreshes media info every 2 seconds."""
+    global _media_cache_started
+    if _media_cache_started:
+        return
+    _media_cache_started = True
+
+    def _media_cache_loop():
+        import time as _time
+        while True:
+            try:
+                loop = _get_media_loop()
+                info = loop.run_until_complete(get_media_info())
+                session = loop.run_until_complete(getMediaSession())
+                playback_status = session.get_playback_info().playback_status if session else None
+                with _media_cache_lock:
+                    _media_cache["info"] = info
+                    _media_cache["playback_status"] = playback_status
+            except Exception:
+                with _media_cache_lock:
+                    _media_cache["info"] = {}
+                    _media_cache["playback_status"] = None
+            _time.sleep(2)
+
+    t = threading.Thread(target=_media_cache_loop, daemon=True)
+    t.start()
+
 def _run_async_media_info():
-    return _get_media_loop().run_until_complete(get_media_info())
+    _start_media_cache_thread()
+    with _media_cache_lock:
+        return dict(_media_cache["info"])
 
 def mediaIs(state):
+    _start_media_cache_thread()
     import winsdk.windows.media.control as wmc
-    session = _get_media_loop().run_until_complete(getMediaSession())
-    if session == None:
+    with _media_cache_lock:
+        ps = _media_cache["playback_status"]
+    if ps is None:
         return False
-    return int(wmc.GlobalSystemMediaTransportControlsSessionPlaybackStatus[state]) == session.get_playback_info().playback_status
+    return int(wmc.GlobalSystemMediaTransportControlsSessionPlaybackStatus[state]) == ps
   
 confDataDict = { #this dictionary will always exclude position 0 which is the config version!
   "1.4.1" : ['confVersion', 'deprecated_topTextToggle', 'deprecated_topTimeToggle', 'deprecated_topSongToggle', 'deprecated_topCPUToggle', 'deprecated_topRAMToggle', 'deprecated_topNoneToggle', 'deprecated_bottomTextToggle', 'deprecated_deprecated_bottomTimeToggle', 'deprecated_bottomSongToggle', 'deprecated_bottomCPUToggle', 'deprecated_bottomRAMToggle', 'deprecated_bottomNoneToggle', 'message_delay', 'messageString', 'FileToRead', 'scrollText', 'hideSong', 'deprecated_hideMiddle', 'hideOutside', 'showPaused', 'songDisplay', 'showOnChange', 'songChangeTicks', 'minimizeOnStart', 'keybind_run', 'keybind_afk','topBar', 'middleBar', 'bottomBar', 'deprecated_topHRToggle', 'deprecated_bottomHRToggle', 'pulsoidToken', 'avatarHR', 'blinkOverride', 'blinkSpeed', 'useAfkKeybind', 'toggleBeat', 'updatePrompt'],
