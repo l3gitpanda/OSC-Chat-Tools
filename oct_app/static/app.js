@@ -599,21 +599,28 @@ function showToast(msg, isError) {
 }
 
 // ---- SocketIO real-time updates ----
+function setTextIfChanged(el, value) {
+    if (el.textContent !== value) el.textContent = value;
+}
+function setCheckedIfChanged(el, value) {
+    if (el.checked !== value) el.checked = value;
+}
+
 socket.on('status_update', (data) => {
     // Update run/afk toggles
-    document.getElementById('runToggle').checked = data.playMsg;
-    document.getElementById('afkToggle').checked = data.afk;
+    setCheckedIfChanged(document.getElementById('runToggle'), data.playMsg);
+    setCheckedIfChanged(document.getElementById('afkToggle'), data.afk);
 
     // Update preview
-    document.getElementById('messagePreview').textContent = data.msgOutput || '';
+    setTextIfChanged(document.getElementById('messagePreview'), data.msgOutput || '');
 
     // Update sent countdown
     if (data.sendSkipped) {
-        document.getElementById('sentCountdown').textContent =
-            'Last sent: ' + data.sentTime + '/30 [Skipped Send]';
+        setTextIfChanged(document.getElementById('sentCountdown'),
+            'Last sent: ' + data.sentTime + '/30 [Skipped Send]');
     } else {
-        document.getElementById('sentCountdown').textContent =
-            'Last sent: ' + data.sentTime + '/' + data.message_delay;
+        setTextIfChanged(document.getElementById('sentCountdown'),
+            'Last sent: ' + data.sentTime + '/' + data.message_delay);
     }
 
     // Update timer
@@ -621,8 +628,8 @@ socket.on('status_update', (data) => {
     const h = Math.floor(tr / 3600000);
     const m = Math.floor((tr / 60000) % 60);
     const s = Math.floor((tr / 1000) % 60);
-    document.getElementById('currentTimer').textContent =
-        String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    setTextIfChanged(document.getElementById('currentTimer'),
+        String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
 
     // Update song ribbon
     const song = data.song || {};
@@ -630,11 +637,11 @@ socket.on('status_update', (data) => {
     if (data.playMsg && song.showSongInfo && song.name) {
         ribbon.classList.add('visible');
         const isPlaying = song.spotifyPlayState === 'PLAYING';
-        document.getElementById('ribbonPlayStatus').textContent = isPlaying ? '\u25B6\uFE0F' : '\u23F8\uFE0F';
+        setTextIfChanged(document.getElementById('ribbonPlayStatus'), isPlaying ? '\u25B6\uFE0F' : '\u23F8\uFE0F');
 
         let displayName = song.name;
         if (displayName.length > 30) displayName = displayName.substring(0, 30) + '...';
-        document.getElementById('ribbonSongName').textContent = displayName;
+        setTextIfChanged(document.getElementById('ribbonSongName'), displayName);
         document.getElementById('ribbonSongName').onclick = () => {
             if (song.spotifySongUrl && song.useSpotifyApi) {
                 window.open(song.spotifySongUrl);
@@ -645,13 +652,16 @@ socket.on('status_update', (data) => {
     }
 });
 
+const _logLines = [];
+const MAX_CLIENT_LOG_LINES = 500;
+
 socket.on('log_append', (data) => {
     const logEl = document.getElementById('output-log');
-    if (logEl.textContent) {
-        logEl.textContent += '\n' + data.line;
-    } else {
-        logEl.textContent = data.line;
+    _logLines.push(data.line);
+    if (_logLines.length > MAX_CLIENT_LOG_LINES) {
+        _logLines.shift();
     }
+    logEl.textContent = _logLines.join('\n');
     logEl.scrollTop = logEl.scrollHeight;
 });
 
